@@ -266,3 +266,9 @@ config:
       - work-dir: "internal-gateway"
         image-name: "internal-gateway"
         dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-pb-digilocker"
+    build:
+      - work-dir: "egov-pb-digilocker"
+        image-name: "egov-pb-digilocker"
+        dockerfile: "build/maven/Dockerfile"
