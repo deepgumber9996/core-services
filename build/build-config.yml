@@ -269,6 +269,6 @@ config:
 
   - name: "builds/core-services/egov-pb-digilocker"
     build:
-      - work-dir: "egov-pb-digilocker/src/main/java/org/egov/dx"
+      - work-dir: "egov-pb-digilocker"
         image-name: "egov-pb-digilocker"
         dockerfile: "build/maven/Dockerfile"
