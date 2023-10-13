@@ -44,7 +44,7 @@ public class PTServiceDXConstants {
 	//public static final String ORIGIN="https://apisetu.gov.in";
 	public static final String ORIGIN="https://partners.digitallocker.gov.in";
 	
-	public static final String DIGILOCKER_ISSUER_ID = "in.mseva";
+	public static final String DIGILOCKER_ISSUER_ID = "in.gov.lgpunjab";
 	
 	public static final String DIGILOCKER_DOCTYPE = "PRTAX";
 
