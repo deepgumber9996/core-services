@@ -41,6 +41,11 @@ import org.egov.dx.web.models.SearchCriteria;
 import org.egov.dx.web.models.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.AnyTypePermission;
@@ -364,15 +369,19 @@ public class DataExchangeService {
 		{
 			Certificate certificate=new Certificate();
 			 certificate.setLanguage("99");
-	    	 certificate.setName("Property Tax Receipt");
+	    	 certificate.setName("Punjab Property Tax Receipt");
 	    	 certificate.setType("PRTAX");
-	    	 certificate.setNumber("");
+	    	  certificate.setNumber(payment.getId());
 	    	 certificate.setPrevNumber("");
+	    	 LocalDate 
+	    	 date=Instant.ofEpochMilli(payment.getTransactionDate()).atZone(ZoneId.systemDefault()).toLocalDate();
+	    	 String a= String.valueOf(date);
 	    	 certificate.setExpiryDate("");
-	    	 certificate.setValidFromDate("");
-	    	 certificate.setIssuedAt("");
-	    	 certificate.setIssueDate("");
-	    	 certificate.setStatus("A");
+	    	 certificate.setValidFromDate(a);
+	    	 certificate.setIssuedAt(payment.getTenantId());
+	    	 certificate.setStatus("");
+	         certificate.setIssueDate(a);
+	    	 certificate.setStatus("Active");
 	    	 
 	    	 IssuedBy issuedBy=new IssuedBy();
 	    	 Organization organization=new Organization();
