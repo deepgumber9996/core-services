@@ -367,10 +367,9 @@ public class DataExchangeService {
 		
 		Certificate populateCertificate(Payment payment)
 		{
-			Certificate certificate=new Certificate();
-			 certificate.setLanguage("99");
-	    	 certificate.setName("Punjab Property Tax Receipt");
-	    	 certificate.setType("PRTAX");
+		Certificate certificate=new Certificate();
+			certificate.setname("Property Tax Receipt");
+	    	 certificate.settype("PRTAX");
 	    	  certificate.setNumber(payment.getId());
 	    	 certificate.setPrevNumber("");
 	    	 LocalDate 
@@ -379,31 +378,31 @@ public class DataExchangeService {
 	    	 certificate.setExpiryDate("");
 	    	 certificate.setValidFromDate(a);
 	    	 certificate.setIssuedAt(payment.getTenantId());
-	         certificate.setIssueDate(a);
-	    	 certificate.setStatus("Active");
+	         certificate.setissueDate(a);
+	    	 certificate.setstatus("A");
 	    	 
 	    	 IssuedBy issuedBy=new IssuedBy();
 	    	 Organization organization=new Organization();
-	    	 organization.setName(payment.getTenantId());
-	    	 organization.setType("Muncipal Body");
+	    	 organization.setName("Punjab Municipal Infrastructure Development Company");
+	    	 organization.setType("SG");
+	    	 organization.setTin("");
 	    	 Address address=new Address();
 	    	 address.setCountry("IN");
+	    	 address.setState("Punjab");
 	    	 organization.setAddress(address);
 	    	 issuedBy.setOrganisation(organization);
 	    	 certificate.setIssuedBy(issuedBy);
+	    	 
 	    	 
 	    	 IssuedTo issuedTo=new IssuedTo();
 	    	 Person person = new Person();
 	    	 person.setAddress(address);
 	    	 person.setPhoto("");
-		 person.setName(payment.getPayerName());
+	    	 person.setName(payment.getPayerName());
 	    	 person.setPhone(payment.getMobileNumber());
 	    	 certificate.setIssuedTo(issuedTo);
 	    	 
 	    	 CertificateData certificateData=new CertificateData();
-	    	 CertificateForData certificateForData=new CertificateForData();
-	    	 certificateData.setCertificate(certificateForData);
-	    	 
 	    	 PropertyTaxReceipt propertyTaxReceipt=new PropertyTaxReceipt();
 	    	 propertyTaxReceipt.setPaymentDate(payment.getPaymentDetails().get(0).getReceiptDate().toString());
 	    	 propertyTaxReceipt.setServicetype(payment.getPaymentDetails().get(0).getBusinessService());
