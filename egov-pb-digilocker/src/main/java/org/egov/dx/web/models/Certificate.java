@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 @XStreamAlias("Certificate")
 public class Certificate {
 	
-	@XStreamAlias("IssuedBy")
+	
     private IssuedBy issuedBy;
 	
-	@XStreamAlias("IssuedTo")
+	
     private IssuedTo issuedTo;
 	
 	@XStreamAlias("CertificateData")
@@ -32,43 +32,90 @@ public class Certificate {
     @XStreamAlias("Signature")
     private String signature;
 
-    @XmlAttribute
+ 
     @XStreamAlias("language")
     private String language;
     
-    @XmlAttribute
+  
     @XStreamAlias("name")
     private String name;
     
-    @XmlAttribute
+  
     @XStreamAlias("type")
     private String type;
     
-    @XmlAttribute
     @XStreamAlias("number")
     private String number;
     
-    @XmlAttribute
+ 
     @XStreamAlias("prevNumber")
     private String prevNumber;
     
-    @XmlAttribute
+
     @XStreamAlias("expiryDate")
     private String expiryDate;
     
-    @XmlAttribute
+
     @XStreamAlias("validFromDate")
     private String validFromDate;
     
-    @XmlAttribute
+
     @XStreamAlias("issuedAt")
     private String issuedAt;
     
-    @XmlAttribute
+
     @XStreamAlias("issueDate")
     private String issueDate;
     
-    @XmlAttribute
+    
     @XStreamAlias("status")
     private String status;
+    
+    
+    @XmlAttribute
+    public String getlanguage() {
+        return language;
+    }
+
+    public void setlanguage(String language) {
+        this.language = language;
+    }
+    
+    @XmlAttribute
+    public String getname() {
+        return name;
+    }
+
+    public void setname(String name) {
+        this.name = name;
+    }
+    
+    @XmlAttribute
+    public String gettype() {
+        return type;
+    }
+
+    public void settype(String type) {
+        this.type = type;
+    }
+    
+    @XmlAttribute
+    public String getissueDate() {
+        return issueDate;
+    }
+
+    public void setissueDate(String issueDate) {
+        this.issueDate = issueDate;
+    }
+    
+ 
+    
+    @XmlAttribute
+    public String getstatus() {
+        return status;
+    }
+
+    public void setstatus(String status) {
+        this.status = status;
+    }
 }
