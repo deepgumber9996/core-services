@@ -189,19 +189,61 @@ public class DataExchangeService {
 				     docDetailsResponse.setIssuedTo(issuedTo);
 
 			    	 Certificate certificate=new Certificate();
+//			    	 certificate.setname("Property Tax Receipt");
+//			    	 certificate.setType("PRTAX");
+//			    	 certificate.setPrevNumber("");
+//			    	 certificate.setExpiryDate("");
+//			    	 certificate.setValidFromDate("");
+//			    	 certificate.setIssuedAt(searchCriteria.getOrigin());
+//			    	 certificate.setStatus("A");
+//			    	 xstream.processAnnotations(Certificate.class);
+//				      
+//			  
+//			    	 IssuedBy issuedBy=new IssuedBy();
+//			    	 Organization organization=new Organization();
+//			    	 organization.setName("Punjab Municipal Infrastructure Development Company");
+//			    	
+//			    	 organization.setTin("");
+//			    	 organization.setuuid("");
+//			    	 Address address=new Address();
+//			    	 address.setDistrict("Chandigarh");
+//			    	 address.setCountry("IN");
+//			    	 address.setState("Chandigarh");
+//			    	 organization.setAddress(address);
+//			    	
+//
+//			         // Print the XML output
+//			       //  System.out.println(xml);
+//			    	 issuedBy.setOrganisation(organization);
+//			    	 certificate.setIssuedBy(issuedBy);
+			    	 xstream.processAnnotations(Certificate.class);
+			    	 xstream.processAnnotations(Organization.class);
+			         xstream.processAnnotations(Address.class);
+			         xstream.processAnnotations(IssuedBy.class);
+			         xstream.processAnnotations(IssuedTo.class);
+//			         xstream.toXML(issuedBy);
+//			    	 
+//			    	 IssuedTo IssuedTo=new IssuedTo();
+//			    	 Person person = new Person();
+//			    	 person.setAddress(address);
+//			    	 person.setPhoto("");
+//			    	 person.setName(searchCriteria.getPayerName());
+//			    	 person.setPhone(searchCriteria.getMobile());
+//			    	 certificate.setIssuedTo(IssuedTo);
 
 				     if(searchCriteria.getDocType().equals("PRTAX"))
 				     {
 				    	 
 				    	 certificate=populateCertificate(payments.get(0));
-				 	     xstream.processAnnotations(Certificate.class);
+//				 	     xstream.processAnnotations(Certificate.class);
 
-				    					    	 
+				    	 String xml1 = xstream.toXML(certificate); 
+				    	 System.out.println(xml1);
 				     }
 				     docDetailsResponse.setDataContent(Base64.getEncoder().encodeToString( xstream.toXML(certificate).getBytes()));
 
 				     docDetailsResponse.setDocContent(encodedString);
-
+				     //System.out.println(docDetailsResponse);
 				     model.setDocDetails(docDetailsResponse);
 				       
 
@@ -260,7 +302,7 @@ public class DataExchangeService {
 				filestoreId=filestoreId.concat(urlArray[i]).concat("-");
 
 		}
-		//String o="c638da20-04f9-49d7-bc46-939aa839dd35";
+		
 		 String o=paymentService.getFilestore(filestoreId).toString();
 		 
 		 if(o!=null)
@@ -367,40 +409,51 @@ public class DataExchangeService {
 		
 		Certificate populateCertificate(Payment payment)
 		{
-		Certificate certificate=new Certificate();
-			certificate.setName("Property Tax Receipt");
+			Certificate certificate=new Certificate();
+			Date currentDate = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			String formattedDate = dateFormat.format(currentDate);
+			certificate.setLanguage("99");	    	 
+			certificate.setname("Property Tax Receipt");
 	    	 certificate.setType("PRTAX");
-	    	  certificate.setNumber(payment.getId());
 	    	 certificate.setPrevNumber("");
-	    	 LocalDate 
-	    	 date=Instant.ofEpochMilli(payment.getTransactionDate()).atZone(ZoneId.systemDefault()).toLocalDate();
-	    	 String a= String.valueOf(date);
+	    	 certificate.setIssueDate(formattedDate);
 	    	 certificate.setExpiryDate("");
-	    	 certificate.setValidFromDate(a);
+	    	 certificate.setValidFromDate("");
 	    	 certificate.setIssuedAt(payment.getTenantId());
-	         certificate.setIssuedAt(a);
 	    	 certificate.setStatus("A");
 	    	 
+	  
 	    	 IssuedBy issuedBy=new IssuedBy();
 	    	 Organization organization=new Organization();
 	    	 organization.setName("Punjab Municipal Infrastructure Development Company");
 	    	 organization.setType("SG");
 	    	 organization.setTin("");
 	    	 Address address=new Address();
+	    	 address.setType("");
+	    	 address.setLine1("");
+	    	 address.setLine2("");
+	    	 address.setHouse("");
+	    	 address.setLandmark("");
+	    	 address.setLocality("");
+	    	 address.setVtc("");
+	    	 address.setDistrict("Chandigarh");
 	    	 address.setCountry("IN");
-	    	 address.setState("Punjab");
+	    	 address.setState("Chandigarh");
+	    	 organization.setAddress(address);
 	    	 organization.setAddress(address);
 	    	 issuedBy.setOrganisation(organization);
 	    	 certificate.setIssuedBy(issuedBy);
 	    	 
 	    	 
-	    	 IssuedTo issuedTo=new IssuedTo();
+	    	 IssuedTo IssuedTo=new IssuedTo();
 	    	 Person person = new Person();
 	    	 person.setAddress(address);
 	    	 person.setPhoto("");
 	    	 person.setName(payment.getPayerName());
 	    	 person.setPhone(payment.getMobileNumber());
-	    	 certificate.setIssuedTo(issuedTo);
+	    	 certificate.setIssuedTo(IssuedTo);
+	    	 
 	    	 
 	    	 CertificateData certificateData=new CertificateData();
 	    	 PropertyTaxReceipt propertyTaxReceipt=new PropertyTaxReceipt();
@@ -428,6 +481,7 @@ public class DataExchangeService {
 	    	 propertyTaxReceipt.setPaymentForReceipt(paymentForReceipt);
 	    	 certificateData.setPropertyTaxReceipt(propertyTaxReceipt);
 	    	 certificate.setCertificateData(certificateData);
+
 	    	 return certificate;
 		}
 }
