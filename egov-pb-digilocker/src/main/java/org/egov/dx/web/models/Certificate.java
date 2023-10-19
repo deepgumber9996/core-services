@@ -1,8 +1,8 @@
 package org.egov.dx.web.models;
 
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,63 +15,66 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-@XmlRootElement
+
 @XStreamAlias("Certificate")
 public class Certificate {
-	
-	
+	 @XStreamAsAttribute
+	    private String signature;
+
+	    @XStreamAsAttribute
+	    private String language;
+	    
+	    @XStreamAsAttribute
+	    private String name;
+	    
+	    @XStreamAsAttribute
+	    private String type;
+	    
+	    @XStreamAsAttribute
+	    private String number;
+	    
+	    @XStreamAsAttribute
+	    private String prevNumber;
+	    
+
+	    @XStreamAsAttribute
+	    private String expiryDate;
+	    
+
+	    @XStreamAsAttribute
+	    private String validFromDate;
+	    
+	    @XStreamAsAttribute
+	    private String issuedAt;
+	    
+
+	    @XStreamAsAttribute
+	    private String issueDate;
+	    
+	    
+	    @XStreamAsAttribute
+	    private String status;
+	    
+	    public String getname() {
+	        return name;
+	    }
+
+	    public void setname(String name) {
+	        this.name = name;
+	    }
+
+	   
+	    
+	@XStreamAlias("issuedBy")
     private IssuedBy issuedBy;
 	
-	
+    @XStreamAlias("issuedTo")
     private IssuedTo issuedTo;
 	
 	@XStreamAlias("CertificateData")
     private CertificateData certificateData;
 	
-    @Size(max=64)
-    @XStreamAlias("Signature")
-    private String signature;
-
- 
-    @XStreamAlias("language")
-    private String language;
-    
-  
-    @XStreamAlias("name")
-    private String name;
-    
-  
-    @XStreamAlias("type")
-    private String type;
-    
-    @XStreamAlias("number")
-    private String number;
-    
- 
-    @XStreamAlias("prevNumber")
-    private String prevNumber;
-    
-
-    @XStreamAlias("expiryDate")
-    private String expiryDate;
-    
-
-    @XStreamAlias("validFromDate")
-    private String validFromDate;
-    
-
-    @XStreamAlias("issuedAt")
-    private String issuedAt;
-    
-
-    @XStreamAlias("issueDate")
-    private String issueDate;
-    
-    
-    @XStreamAlias("status")
-    private String status;
-    
-    
    
-
+  
+    
 }
