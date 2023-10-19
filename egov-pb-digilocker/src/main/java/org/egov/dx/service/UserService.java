@@ -31,7 +31,7 @@ public class UserService {
          try {
              HttpHeaders headers = new HttpHeaders();
              headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-             headers.set("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
+             headers.set("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
              MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
              map.add("username", "EMP11");
              map.add("password", "eGov@123");
