@@ -1,8 +1,7 @@
 package org.egov.dx.web.models;
 
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAttribute;
-
+import javax.xml.bind.annotation.XmlRootElement;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
+@XmlRootElement
 @XStreamAlias("Certificate")
 public class Certificate {
 	
@@ -72,50 +72,6 @@ public class Certificate {
     private String status;
     
     
-    @XmlAttribute
-    public String getlanguage() {
-        return language;
-    }
+   
 
-    public void setlanguage(String language) {
-        this.language = language;
-    }
-    
-    @XmlAttribute
-    public String getname() {
-        return name;
-    }
-
-    public void setname(String name) {
-        this.name = name;
-    }
-    
-    @XmlAttribute
-    public String gettype() {
-        return type;
-    }
-
-    public void settype(String type) {
-        this.type = type;
-    }
-    
-    @XmlAttribute
-    public String getissueDate() {
-        return issueDate;
-    }
-
-    public void setissueDate(String issueDate) {
-        this.issueDate = issueDate;
-    }
-    
- 
-    
-    @XmlAttribute
-    public String getstatus() {
-        return status;
-    }
-
-    public void setstatus(String status) {
-        this.status = status;
-    }
 }
