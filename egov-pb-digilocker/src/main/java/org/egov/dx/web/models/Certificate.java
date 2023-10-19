@@ -65,11 +65,11 @@ public class Certificate {
 
 	   
 	    
-	@XStreamAlias("issuedBy")
-    private IssuedBy issuedBy;
+	@XStreamAlias("IssuedBy")
+    private IssuedBy IssuedBy;
 	
-    @XStreamAlias("issuedTo")
-    private IssuedTo issuedTo;
+    @XStreamAlias("IssuedTo")
+    private IssuedTo IssuedTo;
 	
 	@XStreamAlias("CertificateData")
     private CertificateData certificateData;
