@@ -182,8 +182,39 @@ public class DataExchangeService {
 				 
 				     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
 				     IssuedTo issuedTo=new IssuedTo();
-				     List<Person> persons= new ArrayList<Person>();
-				     issuedTo.setPersons(persons);
+				     @SuppressWarnings("rawtypes")
+						Person person=new Person();
+					     person.setUid("");
+					     person.setTitle("");
+					     person.setName(searchCriteria.getPayerName());
+					     person.setDob("");
+					     person.setAge("");
+					     person.setSwd("");
+					     person.setSwdIndicator("");
+					     person.setMotherName("");
+					     person.setGender("");
+					     person.setMaritalStatus("");
+					     person.setRelationWithHof("");
+					     person.setDisabilityStatus("");
+					     person.setCategory("");
+					     person.setReligion("");
+				    	 person.setPhone(searchCriteria.getMobile());
+				    	 person.setEmail("");
+					     Address address1=new Address();
+					     address1.setType("permanent");
+				    	 address1.setLine1("");
+				    	 address1.setLine2("");
+				    	 address1.setHouse("");
+				    	 address1.setLandmark("");
+				    	 address1.setLocality("");
+				    	 address1.setVtc("");
+				    	 address1.setDistrict("");
+				    	 address1.setCountry("IN");
+				    	 address1.setState("Punjab");
+				    	 person.setPhoto("");
+				    	 person.setAddress(address1);
+				  
+				     issuedTo.setPerson(person);
 				     docDetailsResponse.setURI(DIGILOCKER_ISSUER_ID.concat("-").concat(DIGILOCKER_DOCTYPE).concat("-").
 				    		 concat(filestore));
 				     docDetailsResponse.setIssuedTo(issuedTo);
@@ -266,10 +297,42 @@ public class DataExchangeService {
 		     model.setResponseStatus(responseStatus);
 		 
 		     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
+//		     IssuedTo issuedTo=new IssuedTo();
+		   
 		     IssuedTo issuedTo=new IssuedTo();
-		     List<Person> persons= new ArrayList<Person>();
-		     issuedTo.setPersons(persons);
-		     docDetailsResponse.setURI(null);
+		     @SuppressWarnings("rawtypes")
+				Person person=new Person();
+			     person.setUid("");
+			     person.setTitle("");
+			     person.setName(searchCriteria.getPayerName());
+			     person.setDob("");
+			     person.setAge("");
+			     person.setSwd("");
+			     person.setSwdIndicator("");
+			     person.setMotherName("");
+			     person.setGender("");
+			     person.setMaritalStatus("");
+			     person.setRelationWithHof("");
+			     person.setDisabilityStatus("");
+			     person.setCategory("");
+			     person.setReligion("");
+		    	 person.setPhone(searchCriteria.getMobile());
+		    	 person.setEmail("");
+			     Address address1=new Address();
+			     address1.setType("permanent");
+		    	 address1.setLine1("");
+		    	 address1.setLine2("");
+		    	 address1.setHouse("");
+		    	 address1.setLandmark("");
+		    	 address1.setLocality("");
+		    	 address1.setVtc("");
+		    	 address1.setDistrict(searchCriteria.getOrigin());
+		    	 address1.setCountry("IN");
+		    	 address1.setState("Punjab");
+		    	 person.setPhoto("");
+		    	 person.setAddress(address1);
+		     person.setName(searchCriteria.getPayerName());
+//		     docDetailsResponse.setURI(null);
 		     docDetailsResponse.setIssuedTo(issuedTo);
 		     //docDetailsResponse.setDataContent("");
 		     docDetailsResponse.setDocContent("");
@@ -340,11 +403,12 @@ public class DataExchangeService {
 			 
 			     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
 			     IssuedTo issuedTo=new IssuedTo();
-			     List<Person> persons= new ArrayList<Person>();
-			     issuedTo.setPersons(persons);
+			     Person person=new Person();
+//			    	 issuedTo.setPerson(person);
+		    	
 			     docDetailsResponse.setURI(null);
 			     docDetailsResponse.setIssuedTo(issuedTo);
-			     //docDetailsResponse.setDataContent(encodedString);
+			     docDetailsResponse.setDataContent(encodedString);
 			     docDetailsResponse.setDocContent(encodedString);
 
 			     model.setDocDetails(docDetailsResponse);
@@ -368,11 +432,11 @@ public class DataExchangeService {
 		     model.setResponseStatus(responseStatus);
 		     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
 		     log.info(EXCEPTION_TEXT_VALIDATION);
-		     IssuedTo issuedTo=new IssuedTo();
-		     List<Person> persons= new ArrayList<Person>();
-		     issuedTo.setPersons(persons);
-		     docDetailsResponse.setURI(null);
-		     docDetailsResponse.setIssuedTo(issuedTo);
+//		     IssuedTo issuedTo=new IssuedTo();
+//		     List<Person> persons= new ArrayList<Person>();
+//		     issuedTo.setPersons(persons);
+//		     docDetailsResponse.setURI(null);
+//		     docDetailsResponse.setIssuedTo(issuedTo);
 		     //docDetailsResponse.setDataContent("");
 		     docDetailsResponse.setDocContent("");
 
@@ -446,13 +510,41 @@ public class DataExchangeService {
 	    	 certificate.setIssuedBy(issuedBy);
 	    	 
 	    	 
-	    	 IssuedTo IssuedTo=new IssuedTo();
-	    	 Person person = new Person();
-	    	 person.setAddress(address);
+             IssuedTo issuedTo=new IssuedTo();
+		     @SuppressWarnings("rawtypes")
+			Person person=new Person();
+		     
+		     person.setUid("");
+		     person.setTitle("");
+		     person.setName(payment.getPayerName());
+		     person.setDob("");
+		     person.setAge("");
+		     person.setSwd("");
+		     person.setSwdIndicator("");
+		     person.setMotherName("");
+		     person.setGender("");
+		     person.setMaritalStatus("");
+		     person.setRelationWithHof("");
+		     person.setDisabilityStatus("");
+		     person.setCategory("");
+		     person.setReligion("");
+		     person.setPhone(payment.getMobileNumber());
+		     person.setEmail(payment.getPayerEmail());
+		     Address address1=new Address();
+		     address1.setType("permanent");
+	    	 address1.setLine1("");
+	    	 address1.setLine2("");
+	    	 address1.setHouse("");
+	    	 address1.setLandmark("");
+	    	 address1.setLocality("");
+	    	 address1.setVtc("");
+	    	 address1.setDistrict(payment.getTenantId());
+	    	 address1.setCountry("IN");
+	    	 address1.setState("Punjab");
 	    	 person.setPhoto("");
-	    	 person.setName(payment.getPayerName());
-	    	 person.setPhone(payment.getMobileNumber());
-	    	 certificate.setIssuedTo(IssuedTo);
+	    	 person.setAddress(address1);
+	    	 issuedTo.setPerson(person);
+	    	 certificate.setIssuedTo(issuedTo);
 	    	 
 	    	 
 	    	 CertificateData certificateData=new CertificateData();
