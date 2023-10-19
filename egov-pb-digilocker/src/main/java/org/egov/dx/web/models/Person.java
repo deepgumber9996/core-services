@@ -3,6 +3,7 @@ package org.egov.dx.web.models;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,69 +17,69 @@ import lombok.NoArgsConstructor;
 @Builder
 @EqualsAndHashCode
 @XStreamAlias("Person")
-public class Person {
+public class Person<Photo>  {
 	
-	@XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("uid")
     private String uid;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("title")
     private String title;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("name")
     private String name;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("dob")
     private String dob;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("age")
     private String age;
 	
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("swd")
     private String swd;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("swdIndicator")
     private String swdIndicator;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("motherName")
     private String motherName;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("gender")
     private String gender;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("maritalStatus")
     private String maritalStatus;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("relationWithHof")
     private String relationWithHof;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("disabilityStatus")
     private String disabilityStatus;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("category")
     private String category;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("religion")
     private String religion;
 
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("phone")
     private String phone;
     
-    @XmlAttribute
+	@XStreamAsAttribute
     @XStreamAlias("email")
     private String email;
     
@@ -87,6 +88,8 @@ public class Person {
     
 	@XStreamAlias("Photo")
     private String photo;
+
+	
 	
 	     
 }
