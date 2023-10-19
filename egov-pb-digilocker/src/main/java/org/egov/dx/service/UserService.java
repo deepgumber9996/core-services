@@ -34,7 +34,7 @@ public class UserService {
              headers.set("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
              MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
              map.add("username", "EMP11");
-             map.add("password", "eGov@123");
+             map.add("password", "EMP11");
              map.add("grant_type", "password");
              map.add("scope", "read");
              map.add("tenantId","pb.testing");
