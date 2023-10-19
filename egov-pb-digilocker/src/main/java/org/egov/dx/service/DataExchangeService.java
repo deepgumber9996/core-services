@@ -368,8 +368,8 @@ public class DataExchangeService {
 		Certificate populateCertificate(Payment payment)
 		{
 		Certificate certificate=new Certificate();
-			certificate.setname("Property Tax Receipt");
-	    	 certificate.settype("PRTAX");
+			certificate.setName("Property Tax Receipt");
+	    	 certificate.setType("PRTAX");
 	    	  certificate.setNumber(payment.getId());
 	    	 certificate.setPrevNumber("");
 	    	 LocalDate 
@@ -378,8 +378,8 @@ public class DataExchangeService {
 	    	 certificate.setExpiryDate("");
 	    	 certificate.setValidFromDate(a);
 	    	 certificate.setIssuedAt(payment.getTenantId());
-	         certificate.setissueDate(a);
-	    	 certificate.setstatus("A");
+	         certificate.setIssuedAt(a);
+	    	 certificate.setStatus("A");
 	    	 
 	    	 IssuedBy issuedBy=new IssuedBy();
 	    	 Organization organization=new Organization();
