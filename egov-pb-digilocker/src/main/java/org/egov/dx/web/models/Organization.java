@@ -27,11 +27,12 @@ public class Organization {
     @XStreamAsAttribute
     private String tin;
     @XStreamAsAttribute
-    private String type;
-    @XStreamAsAttribute
     private String uuid;
-    
-    private Address address;
+    @XStreamAsAttribute
+    private String type;
+  
+    @XStreamAlias("Address")
+    private Address Address;
 
     // Constructors, getters, and setters
     // ...
@@ -70,11 +71,11 @@ public class Organization {
     }
 
     public Address getAddress() {
-        return address;
+        return Address;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setAddress(Address Address) {
+        this.Address = Address;
     }
     
     public String getuuid() {
