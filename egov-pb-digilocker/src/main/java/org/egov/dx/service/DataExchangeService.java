@@ -116,6 +116,7 @@ public class DataExchangeService {
         requestInfoWrapper.setRequestInfo(request);
 		List<Payment> payments = paymentService.getPayments(criteria,searchCriteria.getDocType(), requestInfoWrapper);
 		log.info("Payments found are:---" + ((!payments.isEmpty()?payments.size():"No payments found")));
+		System.out.println(requestInfoWrapper);
 		PullURIResponse model= new PullURIResponse();
 		XStream xstream = new XStream();   
 		xstream .addPermission(NoTypePermission.NONE); //forbid everything
@@ -480,6 +481,7 @@ public class DataExchangeService {
 			certificate.setLanguage("99");	    	 
 			certificate.setname("Property Tax Receipt");
 	    	 certificate.setType("PRTAX");
+	    	 certificate.setNumber("");
 	    	 certificate.setPrevNumber("");
 	    	 certificate.setIssueDate(formattedDate);
 	    	 certificate.setExpiryDate("");
@@ -493,6 +495,9 @@ public class DataExchangeService {
 	    	 organization.setName("Punjab Municipal Infrastructure Development Company");
 	    	 organization.setType("SG");
 	    	 organization.setTin("");
+	    	 organization.setCode("");
+	    	 organization.setuuid("");
+	    	 
 	    	 Address address=new Address();
 	    	 address.setType("");
 	    	 address.setLine1("");
@@ -501,10 +506,10 @@ public class DataExchangeService {
 	    	 address.setLandmark("");
 	    	 address.setLocality("");
 	    	 address.setVtc("");
+	    	 address.setPin("160022");
 	    	 address.setDistrict("Chandigarh");
 	    	 address.setCountry("IN");
 	    	 address.setState("Chandigarh");
-	    	 organization.setAddress(address);
 	    	 organization.setAddress(address);
 	    	 issuedBy.setOrganisation(organization);
 	    	 certificate.setIssuedBy(issuedBy);
@@ -530,6 +535,8 @@ public class DataExchangeService {
 		     person.setReligion("");
 		     person.setPhone(payment.getMobileNumber());
 		     person.setEmail(payment.getPayerEmail());
+		     
+		     
 		     Address address1=new Address();
 		     address1.setType("permanent");
 	    	 address1.setLine1("");
@@ -538,6 +545,7 @@ public class DataExchangeService {
 	    	 address1.setLandmark("");
 	    	 address1.setLocality("");
 	    	 address1.setVtc("");
+	    	 address1.setPin("");
 	    	 address1.setDistrict(payment.getTenantId());
 	    	 address1.setCountry("IN");
 	    	 address1.setState("Punjab");
