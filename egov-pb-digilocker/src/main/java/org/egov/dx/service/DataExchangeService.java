@@ -120,14 +120,7 @@ public class DataExchangeService {
         requestInfoWrapper.setRequestInfo(request);
 		List<Payment> payments = paymentService.getPayments(criteria,searchCriteria.getDocType(), requestInfoWrapper);
 		log.info("Payments found are:---" + ((!payments.isEmpty()?payments.size():"No payments found")));
-	     if(payments.isEmpty())
-	     {
-	    	 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	     }
-	     else
-	     {
-	    	 response.setStatus(HttpServletResponse.SC_OK);
-	     }
+	
 		System.out.println(requestInfoWrapper);
 		PullURIResponse model= new PullURIResponse();
 		XStream xstream = new XStream();   
@@ -316,6 +309,8 @@ public class DataExchangeService {
 		   //  docDetailsResponse.setIssuedTo(issuedTo);
 		     docDetailsResponse.setDataContent("");
 		     docDetailsResponse.setDocContent("");
+		   
+		    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		     log.info(EXCEPTION_TEXT_VALIDATION);
 		     model.setDocDetails(docDetailsResponse);
 
@@ -413,7 +408,10 @@ public class DataExchangeService {
 		     
 		   //  DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
 		     log.info(EXCEPTION_TEXT_VALIDATION);
-
+		   
+		    	 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		    
+		 
 //		     docDetailsResponse.setDocContent("");
 //
 //		     model.setDocDetails(docDetailsResponse);
