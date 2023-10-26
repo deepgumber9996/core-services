@@ -16,6 +16,8 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.dx.util.Configurations;
@@ -64,6 +66,8 @@ public class DataExchangeService {
 	
 	@Autowired
     private UserService userService;
+	@Autowired
+	private HttpServletResponse  response;
 	
 	@Autowired
 	private Configurations configurations;
@@ -116,6 +120,14 @@ public class DataExchangeService {
         requestInfoWrapper.setRequestInfo(request);
 		List<Payment> payments = paymentService.getPayments(criteria,searchCriteria.getDocType(), requestInfoWrapper);
 		log.info("Payments found are:---" + ((!payments.isEmpty()?payments.size():"No payments found")));
+	     if(payments.isEmpty())
+	     {
+	    	 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	     }
+	     else
+	     {
+	    	 response.setStatus(HttpServletResponse.SC_OK);
+	     }
 		System.out.println(requestInfoWrapper);
 		PullURIResponse model= new PullURIResponse();
 		XStream xstream = new XStream();   
@@ -148,6 +160,7 @@ public class DataExchangeService {
 				paymentRequest.setRequestInfo(requestInfoWrapper.getRequestInfo());
 				filestore=paymentService.createPDF(paymentRequest);
 				o=paymentService.getFilestore(filestore).toString();
+				
 			
 			}
 				if(o!=null)
@@ -298,44 +311,10 @@ public class DataExchangeService {
 		     model.setResponseStatus(responseStatus);
 		 
 		     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
-//		     IssuedTo issuedTo=new IssuedTo();
-		   
-		     IssuedTo issuedTo=new IssuedTo();
-		     @SuppressWarnings("rawtypes")
-				Person person=new Person();
-			     person.setUid("");
-			     person.setTitle("");
-			     person.setName(searchCriteria.getPayerName());
-			     person.setDob("");
-			     person.setAge("");
-			     person.setSwd("");
-			     person.setSwdIndicator("");
-			     person.setMotherName("");
-			     person.setGender("");
-			     person.setMaritalStatus("");
-			     person.setRelationWithHof("");
-			     person.setDisabilityStatus("");
-			     person.setCategory("");
-			     person.setReligion("");
-		    	 person.setPhone(searchCriteria.getMobile());
-		    	 person.setEmail("");
-			     Address address1=new Address();
-			     address1.setType("permanent");
-		    	 address1.setLine1("");
-		    	 address1.setLine2("");
-		    	 address1.setHouse("");
-		    	 address1.setLandmark("");
-		    	 address1.setLocality("");
-		    	 address1.setVtc("");
-		    	 address1.setDistrict(searchCriteria.getOrigin());
-		    	 address1.setCountry("IN");
-		    	 address1.setState("Punjab");
-		    	 person.setPhoto("");
-		    	 person.setAddress(address1);
-		     person.setName(searchCriteria.getPayerName());
-//		     docDetailsResponse.setURI(null);
-		     docDetailsResponse.setIssuedTo(issuedTo);
-		     //docDetailsResponse.setDataContent("");
+
+		     docDetailsResponse.setURI(null);
+		   //  docDetailsResponse.setIssuedTo(issuedTo);
+		     docDetailsResponse.setDataContent("");
 		     docDetailsResponse.setDocContent("");
 		     log.info(EXCEPTION_TEXT_VALIDATION);
 		     model.setDocDetails(docDetailsResponse);
@@ -404,7 +383,7 @@ public class DataExchangeService {
 			 
 			     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
 			     IssuedTo issuedTo=new IssuedTo();
-			     Person person=new Person();
+			   
 //			    	 issuedTo.setPerson(person);
 		    	
 			     docDetailsResponse.setURI(null);
@@ -431,17 +410,13 @@ public class DataExchangeService {
 		     responseStatus.setTs(dtf.format(now));
 		     responseStatus.setTxn(searchCriteria.getTxn());
 		     model.setResponseStatus(responseStatus);
-		     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
+		     
+		   //  DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
 		     log.info(EXCEPTION_TEXT_VALIDATION);
-//		     IssuedTo issuedTo=new IssuedTo();
-//		     List<Person> persons= new ArrayList<Person>();
-//		     issuedTo.setPersons(persons);
-//		     docDetailsResponse.setURI(null);
-//		     docDetailsResponse.setIssuedTo(issuedTo);
-		     //docDetailsResponse.setDataContent("");
-		     docDetailsResponse.setDocContent("");
 
-		     model.setDocDetails(docDetailsResponse);
+//		     docDetailsResponse.setDocContent("");
+//
+//		     model.setDocDetails(docDetailsResponse);
 
 		}
 		
@@ -506,7 +481,7 @@ public class DataExchangeService {
 	    	 address.setLandmark("");
 	    	 address.setLocality("");
 	    	 address.setVtc("");
-	    	 address.setPin("160022");
+	    	 address.setPin("160022");;
 	    	 address.setDistrict("Chandigarh");
 	    	 address.setCountry("IN");
 	    	 address.setState("Chandigarh");
