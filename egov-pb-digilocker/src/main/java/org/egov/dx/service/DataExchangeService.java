@@ -109,19 +109,12 @@ public class DataExchangeService {
         {
         	
         }
-//        User userInfo = User.builder()
-//                .uuid(configurations.getAuthTokenVariable())
-//                .type("EMPLOYEE")
-//                .roles(Collections.emptyList()).id(0L).tenantId("pb.".concat(searchCriteria.getCity())).build();
-
-      //  request = new RequestInfo("", "", 0L, "", "", "", "", "", "", userResponse);
         request.setAuthToken(userResponse.getAuthToken());
         request.setUserInfo(userResponse.getUser());
         requestInfoWrapper.setRequestInfo(request);
 		List<Payment> payments = paymentService.getPayments(criteria,searchCriteria.getDocType(), requestInfoWrapper);
 		log.info("Payments found are:---" + ((!payments.isEmpty()?payments.size():"No payments found")));
 	
-		System.out.println(requestInfoWrapper);
 		PullURIResponse model= new PullURIResponse();
 		XStream xstream = new XStream();   
 		xstream .addPermission(NoTypePermission.NONE); //forbid everything
@@ -134,6 +127,8 @@ public class DataExchangeService {
 		log.info("Name in latest payment is " +payments.get(0).getPayerName());
 		log.info("Mobile in latest payment is " +payments.get(0).getMobileNumber());
 		}
+		
+		
 		if((!payments.isEmpty() && configurations.getValidationFlag().toUpperCase().equals("TRUE") && validateRequest(searchCriteria,payments.get(0)))
 				|| (!payments.isEmpty() && configurations.getValidationFlag().toUpperCase().equals("FALSE"))){ 
 			log.info("Payment object is not null and validations passed!!!");
@@ -149,14 +144,15 @@ public class DataExchangeService {
 				latestPayment.add(payments.get(0));
 				PaymentRequest paymentRequest=new PaymentRequest();
 				paymentRequest.setPayments(latestPayment);
-				//requestInfoWrapper.getRequestInfo().setMsgId("1674457280493|en_IN");
 				paymentRequest.setRequestInfo(requestInfoWrapper.getRequestInfo());
 				filestore=paymentService.createPDF(paymentRequest);
 				o=paymentService.getFilestore(filestore).toString();
 				
 			
 			}
-				if(o!=null)
+			
+			
+			if(o!=null)
 			
 			 		{
 				 	String path=o.split("url=")[1];
@@ -222,62 +218,35 @@ public class DataExchangeService {
 				    	 person.setAddress(address1);
 				  
 				     issuedTo.setPerson(person);
+				   //  String[] parts = filestore.split("-");
+				     String a=searchCriteria.getPropertyId();
+				    // String[] parts = a.split("-");
+				     String b=searchCriteria.getCity();
+				        //String joinedString = String.join("", parts);
+				        String replacedString = a.replace("-", "QW");
 				     docDetailsResponse.setURI(DIGILOCKER_ISSUER_ID.concat("-").concat(DIGILOCKER_DOCTYPE).concat("-").
-				    		 concat(filestore));
+				    		 concat(replacedString).concat("QW").concat(b));
 				     docDetailsResponse.setIssuedTo(issuedTo);
 
 			    	 Certificate certificate=new Certificate();
-//			    	 certificate.setname("Property Tax Receipt");
-//			    	 certificate.setType("PRTAX");
-//			    	 certificate.setPrevNumber("");
-//			    	 certificate.setExpiryDate("");
-//			    	 certificate.setValidFromDate("");
-//			    	 certificate.setIssuedAt(searchCriteria.getOrigin());
-//			    	 certificate.setStatus("A");
-//			    	 xstream.processAnnotations(Certificate.class);
-//				      
-//			  
-//			    	 IssuedBy issuedBy=new IssuedBy();
-//			    	 Organization organization=new Organization();
-//			    	 organization.setName("Punjab Municipal Infrastructure Development Company");
-//			    	
-//			    	 organization.setTin("");
-//			    	 organization.setuuid("");
-//			    	 Address address=new Address();
-//			    	 address.setDistrict("Chandigarh");
-//			    	 address.setCountry("IN");
-//			    	 address.setState("Chandigarh");
-//			    	 organization.setAddress(address);
-//			    	
-//
-//			         // Print the XML output
-//			       //  System.out.println(xml);
-//			    	 issuedBy.setOrganisation(organization);
-//			    	 certificate.setIssuedBy(issuedBy);
+
 			    	 xstream.processAnnotations(Certificate.class);
 			    	 xstream.processAnnotations(Organization.class);
 			         xstream.processAnnotations(Address.class);
 			         xstream.processAnnotations(IssuedBy.class);
 			         xstream.processAnnotations(IssuedTo.class);
-//			         xstream.toXML(issuedBy);
-//			    	 
-//			    	 IssuedTo IssuedTo=new IssuedTo();
-//			    	 Person person = new Person();
-//			    	 person.setAddress(address);
-//			    	 person.setPhoto("");
-//			    	 person.setName(searchCriteria.getPayerName());
-//			    	 person.setPhone(searchCriteria.getMobile());
-//			    	 certificate.setIssuedTo(IssuedTo);
+
 
 				     if(searchCriteria.getDocType().equals("PRTAX"))
 				     {
 				    	 
 				    	 certificate=populateCertificate(payments.get(0));
-//				 	     xstream.processAnnotations(Certificate.class);
 
 				    	 String xml1 = xstream.toXML(certificate); 
 				    	 System.out.println(xml1);
 				     }
+				     
+				     
 				     docDetailsResponse.setDataContent(Base64.getEncoder().encodeToString( xstream.toXML(certificate).getBytes()));
 
 				     docDetailsResponse.setDocContent(encodedString);
@@ -328,48 +297,136 @@ public class DataExchangeService {
 	{
 			
 		PullDocResponse model= new PullDocResponse();
-			
-		String[] urlArray=searchCriteria.getURI().split("-");
-		int len=urlArray.length;
-		String filestoreId="";
-		for(int i=2;i<len;i++)
-		{
-			if(i==(len-1))
-				filestoreId=filestoreId.concat(urlArray[i]);
-			else
-				filestoreId=filestoreId.concat(urlArray[i]).concat("-");
-
-		}
+		XStream xstream = new XStream();
+		xstream .addPermission(NoTypePermission.NONE); //forbid everything
+		xstream .addPermission(NullPermission.NULL);   // allow "null"
+		xstream .addPermission(PrimitiveTypePermission.PRIMITIVES);
+		xstream .addPermission(AnyTypePermission.ANY);
 		
-		 String o=paymentService.getFilestore(filestoreId).toString();
-		 
-		 if(o!=null)
-			 {
-			 String path=o.split("url=")[1];
-		 String pdfPath=path.substring(0,path.length()-3);
-		 URL url1 =new URL(pdfPath);
-		 try {
+		String[] parts = searchCriteria.getURI().split("PTQW|QW");
+		    String part1 = parts[0];
+	        String part2 = parts[1];
+	        String part3 = parts[2];
+	        String part4 = parts[3];
+	        String A="PT-".concat(part2).concat("-").concat(part3);
+	        PaymentSearchCriteria criteria = new PaymentSearchCriteria();
+	    	criteria.setTenantId("pb."+part4);
+	        criteria.setConsumerCodes(Collections.singleton(A));
+	        RequestInfo request=new RequestInfo();
+	        request.setApiId("Rainmaker");
+	        request.setMsgId("1670564653696|en_IN");
+	        RequestInfoWrapper requestInfoWrapper=new RequestInfoWrapper();
+	        UserResponse userResponse =new UserResponse();
+	        try {
+	        	userResponse=userService.getUser();
+	        	}
+	        catch(Exception e)
+	        {
+	        	
+	        }
+	        request.setAuthToken(userResponse.getAuthToken());
+	        request.setUserInfo(userResponse.getUser());
+	        requestInfoWrapper.setRequestInfo(request);
+			List<Payment> payments = paymentService.getPayments(criteria,"PRTAX", requestInfoWrapper);
+			log.info("Payments found are:---" + ((!payments.isEmpty()?payments.size():"No payments found")));
+			xstream .addPermission(NoTypePermission.NONE); //forbid everything
+			xstream .addPermission(NullPermission.NULL);   // allow "null"
+			xstream .addPermission(PrimitiveTypePermission.PRIMITIVES);
+			xstream .addPermission(AnyTypePermission.ANY);
+			log.info("Name to search is " +searchCriteria.getPayerName());
+			//log.info("Mobile to search is " +searchCriteria.getMobile());
+			if(!payments.isEmpty()) {
+			log.info("Name in latest payment is " +payments.get(0).getPayerName());
+			log.info("Mobile in latest payment is " +payments.get(0).getMobileNumber());
+			}
+			
+			
+			if((!payments.isEmpty() || configurations.getValidationFlag().toUpperCase().equals("TRUE") || validateRequest(searchCriteria,payments.get(0)))
+					|| (!payments.isEmpty() && configurations.getValidationFlag().toUpperCase().equals("FALSE"))){ 
+				log.info("Payment object is not null and validations passed!!!");
+				String o=null;
+				String filestore=null;
+				if(payments.get(0).getFileStoreId() != null) {
+					filestore=payments.get(0).getFileStoreId();
+					o=paymentService.getFilestore(payments.get(0).getFileStoreId()).toString();
+				}
+				else
+				{
+					List<Payment> latestPayment=new ArrayList<Payment>();
+					latestPayment.add(payments.get(0));
+					PaymentRequest paymentRequest=new PaymentRequest();
+					paymentRequest.setPayments(latestPayment);
+					paymentRequest.setRequestInfo(requestInfoWrapper.getRequestInfo());
+					filestore=paymentService.createPDF(paymentRequest);
+					o=paymentService.getFilestore(filestore).toString();
+					
+				
+				}
+				
+				
+				if(o!=null)
+				
+				 		{
+					 	String path=o.split("url=")[1];
+					 	String pdfPath=path.substring(0,path.length()-3);
+					 	URL url1 =new URL(pdfPath);
+					 	try {
 
-			          // Read the PDF from the URL and save to a local file
-			     InputStream is1 = url1.openStream();
-			     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+					     // Read the PDF from the URL and save to a local file
+					     InputStream is1 = url1.openStream();
+					     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-			     int nRead;
-			     byte[] data = new byte[1024];
+					     int nRead;
+					     byte[] data = new byte[1024];
 
-			     while ((nRead = is1.read(data, 0, data.length)) != -1) {
-			         buffer.write(data, 0, nRead);
-			     }
+					     while ((nRead = is1.read(data, 0, data.length)) != -1) {
+					         buffer.write(data, 0, nRead);
+					     }
 
-			     buffer.flush();
-			     byte[] targetArray = buffer.toByteArray();
-			     //byte[] sourceBytes = IOUtils.toByteArray(is1)
+					     buffer.flush();
+					     byte[] targetArray = buffer.toByteArray();
+					     String encodedString = Base64.getEncoder().encodeToString(targetArray); 
+	     				    
+					     ResponseStatus responseStatus=new ResponseStatus();
+					     responseStatus.setStatus("1");
+					     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+					     LocalDateTime now = LocalDateTime.now();  
+					     responseStatus.setTs(dtf.format(now));
+					     responseStatus.setTxn(searchCriteria.getTxn());
+					     model.setResponseStatus(responseStatus);
+					 
+					     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
+				    	 Certificate certificate=new Certificate();
 
-			     String encodedString = Base64.getEncoder().encodeToString(targetArray); 
-			     
-			     //model.setResponseStatus("1");
-			     ResponseStatus responseStatus=new ResponseStatus();
-			     responseStatus.setStatus("1");
+				    	 xstream.processAnnotations(Certificate.class);
+				    	 xstream.processAnnotations(Organization.class);
+				         xstream.processAnnotations(Address.class);
+				         xstream.processAnnotations(IssuedBy.class);
+					     certificate=populateCertificate(payments.get(0));
+    			    	 String xml1 = xstream.toXML(certificate); 
+				    	 System.out.println(xml1);
+					     
+					     
+					     
+					     docDetailsResponse.setDataContent(Base64.getEncoder().encodeToString( xstream.toXML(certificate).getBytes()));
+
+					     docDetailsResponse.setDocContent(encodedString);
+					     //System.out.println(docDetailsResponse);
+					     model.setDocDetails(docDetailsResponse);
+					       
+
+				 }
+				 catch (NullPointerException npe) {
+				      log.error(npe.getMessage());
+				      log.info("Error Occured",npe.getMessage());
+				    }
+				  }	
+			} 
+			
+			else
+			{
+				ResponseStatus responseStatus=new ResponseStatus();
+			     responseStatus.setStatus("0");
 			     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
 			     LocalDateTime now = LocalDateTime.now();  
 			     responseStatus.setTs(dtf.format(now));
@@ -377,62 +434,33 @@ public class DataExchangeService {
 			     model.setResponseStatus(responseStatus);
 			 
 			     DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
-			     IssuedTo issuedTo=new IssuedTo();
-			   
-//			    	 issuedTo.setPerson(person);
-		    	
+
 			     docDetailsResponse.setURI(null);
-			     docDetailsResponse.setIssuedTo(issuedTo);
-			     docDetailsResponse.setDataContent(encodedString);
-			     docDetailsResponse.setDocContent(encodedString);
-
+			   //  docDetailsResponse.setIssuedTo(issuedTo);
+			     docDetailsResponse.setDataContent("");
+			     docDetailsResponse.setDocContent("");
+			   
+			    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			     log.info(EXCEPTION_TEXT_VALIDATION);
 			     model.setDocDetails(docDetailsResponse);
-			       
-			    
-			     //return targetArray.toString();
 
-
-			    } catch (NullPointerException npe) {
-			    	log.error(npe.getMessage());
-				      log.info("Error Occured",npe.getMessage());			    }
-			  }	
-		else
-		{
-			ResponseStatus responseStatus=new ResponseStatus();
-		     responseStatus.setStatus("0");
-		     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
-		     LocalDateTime now = LocalDateTime.now();  
-		     responseStatus.setTs(dtf.format(now));
-		     responseStatus.setTxn(searchCriteria.getTxn());
-		     model.setResponseStatus(responseStatus);
-		     
-		   //  DocDetailsResponse docDetailsResponse=new DocDetailsResponse();
-		     log.info(EXCEPTION_TEXT_VALIDATION);
-		   
-		    	 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		    
-		 
-//		     docDetailsResponse.setDocContent("");
-//
-//		     model.setDocDetails(docDetailsResponse);
-
-		}
-		
-		
+			}
 			
-        XStream xstream = new XStream();
-		xstream .addPermission(NoTypePermission.NONE); //forbid everything
-		xstream .addPermission(NullPermission.NULL);   // allow "null"
-		xstream .addPermission(PrimitiveTypePermission.PRIMITIVES);
-		xstream .addPermission(AnyTypePermission.ANY);
-        //xstream.processAnnotations(DocDetails.class);
-        xstream.processAnnotations(PullDocResponse.class);
-        xstream.toXML(model);
-        
-		return xstream.toXML(model);   
+		    xstream.processAnnotations(PullDocResponse.class);
+	        xstream.toXML(model);
+	        
+			return xstream.toXML(model);   
 
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
 		Boolean validateRequest(SearchCriteria searchCriteria, Payment payment)
 		{
 			if(!searchCriteria.getPayerName().equals(payment.getPayerName()))
@@ -557,4 +585,8 @@ public class DataExchangeService {
 
 	    	 return certificate;
 		}
+		
+		
+		
+		
 }
