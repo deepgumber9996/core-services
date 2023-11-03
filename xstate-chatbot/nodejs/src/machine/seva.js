@@ -387,13 +387,13 @@ const sevaMachine = Machine({
           onEntry: assign( (context, event) => {
           (async() => {  
             await new Promise(resolve => setTimeout(resolve, 1000));
-            // dialog.sendMessage(context, dialog.get_message(messages.sevamenu.question, context.user.locale), true);
-            var templateContent = {
-              output: "3797439",
-              type: "template"
-            };
+             dialog.sendMessage(context, dialog.get_message(messages.sevamenu.question, context.user.locale), true);
+            // var templateContent = {
+            //   output: "3797439",
+            //   type: "template"
+            // };
 
-            dialog.sendMessage(context, templateContent, true);
+         //   dialog.sendMessage(context, templateContent, true);
           })();
           }),
           on: {
