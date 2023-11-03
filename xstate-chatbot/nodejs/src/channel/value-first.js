@@ -102,7 +102,7 @@ class ValueFirstWhatsAppProvider {
                 input = '(' + requestBody.latitude + ',' + requestBody.longitude + ')';
             } 
             else if(type === 'image'){
-                var imageInBase64String = requestBody.MediaData;
+                var imageInBase64String = requestBody.media_data;
                 input = await this.convertFromBase64AndStore(imageInBase64String);
             }
             else if(type === 'unknown' || type === 'document')
