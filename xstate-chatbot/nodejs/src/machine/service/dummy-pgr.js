@@ -155,7 +155,7 @@ class DummyPGRService {
                 "department": "Streetlights",
                 "slaHours": 336,
                 "menuPath": "StreetLights",
-                "active": false,
+                "active": true,
                 "order": 1
             },
             {
@@ -164,7 +164,7 @@ class DummyPGRService {
                 "department": "DEPT_1",
                 "slaHours": 336,
                 "menuPath": "StreetLights",
-                "active": true,
+                "active": false,
                 "order": 2
             },
             {
