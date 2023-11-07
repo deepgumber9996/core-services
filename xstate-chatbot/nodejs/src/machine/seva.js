@@ -433,6 +433,14 @@ const sevaMachine = Machine({
               cond: (context) => context.intention == 'locale'
             },
             {
+              target: '#pgr', 
+              cond: (context) => context.intention == 'street_lights'
+            },
+            {
+              target: '#pgr', 
+              cond: (context) => context.intention == 'gar_bage'
+            },
+            {
               target: 'error'
             }
           ]
@@ -566,8 +574,8 @@ let grammer = {
       {intention: 'pt_bills', recognize: ['4', 'ptbill']},
       {intention: 'receipts', recognize: ['5','receipt']},
       {intention: 'locale', recognize: ['6','language', 'english', 'hindi', 'punjabi']},
-      {intention: 'receipts', recognize: ['7','Streetlights']},
-      {intention: 'receipts', recognize: ['8','Garbage']},
+      {intention: 'street_lights', recognize: ['7','streetlights']},
+      {intention: 'gar_bage', recognize: ['8','file', 'new']},
     ]
   },
   confirmation: {
