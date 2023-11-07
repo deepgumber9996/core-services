@@ -434,7 +434,7 @@ const sevaMachine = Machine({
             },
             {
               target: '#pgr', 
-              cond: (context) => context.intention == 'file_new_complaint'
+              cond: (context) => context.intention == 'street_lights'
             },
             {
               target: '#pgr', 
@@ -575,7 +575,7 @@ let grammer = {
       {intention: 'receipts', recognize: ['5','receipt']},
       {intention: 'locale', recognize: ['6','language', 'english', 'hindi', 'punjabi']},
       {intention: 'street_lights', recognize: ['7','file', 'new']},
-      {intention: 'file_new_complaint', recognize: ['1','file', 'new']},
+      {intention: 'gar_bage', recognize: ['8','file', 'new']},
     ]
   },
   confirmation: {

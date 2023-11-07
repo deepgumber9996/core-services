@@ -34,6 +34,14 @@ const pgr =  {
               cond: (context) => context.intention == 'track_existing_complaints'
             },
             {
+              target: '#streetlights', 
+              cond: (context) => context.intention == 'street_lights'
+            },
+            {
+              target: '#garbage', 
+              cond: (context) => context.intention == 'gar_bage'
+            },
+            {
               target: 'error'
             }
           ]
@@ -49,6 +57,14 @@ const pgr =  {
             {
               target: '#trackComplaint', 
               cond: (context) => context.intention == 'track_existing_complaints'
+            },
+            {
+              target: '#streetlights', 
+              cond: (context) => context.intention == 'street_lights'
+            },
+            {
+              target: '#garbage', 
+              cond: (context) => context.intention == 'gar_bage'
             },
             {
               target: 'error'
@@ -1020,7 +1036,9 @@ let grammer = {
   pgrmenu: {
     question: [
       {intention: 'file_new_complaint', recognize: ['1', 'file', 'new']},
-      {intention: 'track_existing_complaints', recognize: ['2', 'track', 'existing']}
+      {intention: 'track_existing_complaints', recognize: ['2', 'track', 'existing']},
+      {intention: 'street_lights', recognize: ['7','file', 'new']},
+      {intention: 'gar_bage', recognize: ['8','file', 'new']}
     ]
   },
   confirmation: {
