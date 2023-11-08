@@ -574,8 +574,8 @@ let grammer = {
       {intention: 'pt_bills', recognize: ['4', 'ptbill']},
       {intention: 'receipts', recognize: ['5','receipt']},
       {intention: 'locale', recognize: ['6','language', 'english', 'hindi', 'punjabi']},
-      {intention: 'street_lights', recognize: ['1','file', 'new']},
-      {intention: 'gar_bage', recognize: ['1','file', 'new']},
+      {intention: 'street_lights', recognize: ['7','file', 'new']},
+      {intention: 'gar_bage', recognize: ['8','file', 'new']},
     ]
   },
   confirmation: {
