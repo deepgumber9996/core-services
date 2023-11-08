@@ -34,7 +34,7 @@ const pgr =  {
               cond: (context) => context.intention == 'track_existing_complaints'
             },
             {
-              target: '#streetlights', 
+              target: '#streetlightdmo', 
               cond: (context) => context.intention == 'street_lights'
             },
             {
@@ -59,7 +59,7 @@ const pgr =  {
               cond: (context) => context.intention == 'track_existing_complaints'
             },
             {
-              target: '#streetlights', 
+              target: '#streetlightdmo', 
               cond: (context) => context.intention == 'street_lights'
             },
             {
@@ -829,8 +829,8 @@ const pgr =  {
         },
       }, 
     },  // fileComplaint
-    streetlights: {
-      id: 'streetlights',
+    streetlightdmo: {
+      id: 'streetlightdmo',
       initial: 'type',
       states: {
         type: {
@@ -847,7 +847,7 @@ const pgr =  {
                     id: 'fetchFrequentComplaints',
                     onDone: {
                       actions: assign((context, event) => {
-                        let preamble = dialog.get_message(messages.streetlights.complaintType.question.preamble, context.user.locale);
+                        let preamble = dialog.get_message(messages.streetlightdmo.complaintType.question.preamble, context.user.locale);
                         let {complaintTypes, messageBundle} = event.data;
                         let {prompt, grammer} = dialog.constructListPromptAndGrammer(complaintTypes, messageBundle, context.user.locale, true);
                         context.grammer = grammer; // save the grammer in context to be used in next step
@@ -906,12 +906,12 @@ const pgr =  {
                         onDone: {
                           actions: assign((context, event) => {
                             let { complaintCategories, messageBundle } = event.data;
-                            let preamble = dialog.get_message(messages.streetlights.complaintType2Step.category.question.preamble, context.user.locale);
+                            let preamble = dialog.get_message(messages.streetlightdmo.complaintType2Step.category.question.preamble, context.user.locale);
                             let {prompt, grammer} = dialog.constructListPromptAndGrammer(complaintCategories, messageBundle, context.user.locale);
 
                             let lengthOfList = grammer.length;
                             let otherTypeGrammer = { intention: 'Others', recognize: [ (lengthOfList + 1).toString() ] };
-                            prompt += `\n*${lengthOfList + 1}.* ` + dialog.get_message(messages.streetlights.complaintType2Step.category.question.otherType, context.user.locale);
+                            prompt += `\n*${lengthOfList + 1}.* ` + dialog.get_message(messages.streetlightdmo.complaintType2Step.category.question.otherType, context.user.locale);
                             grammer.push(otherTypeGrammer);
 
                             context.grammer = grammer; // save the grammer in context to be used in next step
@@ -969,7 +969,7 @@ const pgr =  {
                         onDone: {
                           actions: assign((context, event) => {
                             let { complaintItems, messageBundle } = event.data;
-                            let preamble = dialog.get_message(messages.streetlights.complaintType2Step.item.question.preamble, context.user.locale);
+                            let preamble = dialog.get_message(messages.streetlightdmo.complaintType2Step.item.question.preamble, context.user.locale);
                             let localisationPrefix = 'CS_COMPLAINT_TYPE_';
                             let complaintType = localisationService.getMessageBundleForCode(localisationPrefix + context.slots.pgr.complaint.toUpperCase());
                             let complaint = dialog.get_message(context.slots.pgr.complaint,context.user.locale);
@@ -1045,7 +1045,7 @@ const pgr =  {
               states : {
                 question: {
                   onEntry: assign( (context, event) => {
-                    let message = dialog.get_message(messages.streetlights.geoLocation.question, context.user.locale)
+                    let message = dialog.get_message(messages.streetlightdmo.geoLocation.question, context.user.locale)
                     dialog.sendMessage(context, message);
                   }),
                   on: {
@@ -1114,10 +1114,10 @@ const pgr =  {
                     let message;
                     if(context.pgr.detectedLocation.locality) {
                       let localityName = dialog.get_message(context.pgr.detectedLocation.matchedLocalityMessageBundle, context.user.locale);
-                      message = dialog.get_message(messages.streetlights.confirmLocation.confirmCityAndLocality, context.user.locale);
+                      message = dialog.get_message(messages.streetlightdmo.confirmLocation.confirmCityAndLocality, context.user.locale);
                       message = message.replace('{{locality}}', localityName);
                     } else {
-                      message = dialog.get_message(messages.streetlights.confirmLocation.confirmCity, context.user.locale);                      
+                      message = dialog.get_message(messages.streetlightdmo.confirmLocation.confirmCity, context.user.locale);                      
                     }
                     let cityName = dialog.get_message(context.pgr.detectedLocation.matchedCityMessageBundle, context.user.locale);
                     message = message.replace('{{city}}', cityName);
@@ -1190,7 +1190,7 @@ const pgr =  {
               states: {
                 question: {
                   onEntry: assign((context, event) => {
-                    let message = dialog.get_message(messages.streetlights.cityFuzzySearch.question, context.user.locale)
+                    let message = dialog.get_message(messages.streetlightdmo.cityFuzzySearch.question, context.user.locale)
                     dialog.sendMessage(context, message);
                   }),
                   on: {
@@ -1234,7 +1234,7 @@ const pgr =  {
                       target: '#nlpCitySearch',
                       cond: (context) => !context.slots.pgr["isCityDataMatch"] && context.slots.pgr["predictedCity"] == null && context.slots.pgr["predictedCityCode"] == null,
                       actions: assign((context, event) => {
-                        let message = dialog.get_message(messages.streetlights.cityFuzzySearch.noRecord, context.user.locale)
+                        let message = dialog.get_message(messages.streetlightdmo.cityFuzzySearch.noRecord, context.user.locale)
                         dialog.sendMessage(context, message);
                       })
 
@@ -1248,7 +1248,7 @@ const pgr =  {
                   states:{
                     question: {
                       onEntry: assign((context, event) => {
-                        let message = dialog.get_message(messages.streetlights.cityFuzzySearch.confirmation, context.user.locale);
+                        let message = dialog.get_message(messages.streetlightdmo.cityFuzzySearch.confirmation, context.user.locale);
                         message = message.replace('{{city}}',context.slots.pgr["predictedCity"]);
                         dialog.sendMessage(context, message);
                       }),
@@ -1296,7 +1296,7 @@ const pgr =  {
               states: {
                 question: {
                   onEntry: assign((context, event) => {
-                    let message = dialog.get_message(messages.streetlights.localityFuzzySearch.question, context.user.locale)
+                    let message = dialog.get_message(messages.streetlightdmo.localityFuzzySearch.question, context.user.locale)
                     dialog.sendMessage(context, message);
                   }),
                   on: {
@@ -1339,7 +1339,7 @@ const pgr =  {
                       target: '#nlpLocalitySearch',
                       cond: (context) => !context.slots.pgr["isLocalityDataMatch"] && context.slots.pgr["predictedLocality"] == null && context.slots.pgr["predictedLocalityCode"] == null,
                       actions: assign((context, event) => {
-                        let message = dialog.get_message(messages.streetlights.localityFuzzySearch.noRecord, context.user.locale)
+                        let message = dialog.get_message(messages.streetlightdmo.localityFuzzySearch.noRecord, context.user.locale)
                         dialog.sendMessage(context, message);
                       })
 
@@ -1353,7 +1353,7 @@ const pgr =  {
                   states:{
                     question: {
                       onEntry: assign((context, event) => {
-                        let message = dialog.get_message(messages.streetlights.localityFuzzySearch.confirmation, context.user.locale);
+                        let message = dialog.get_message(messages.streetlightdmo.localityFuzzySearch.confirmation, context.user.locale);
                         message = message.replace('{{locality}}',context.slots.pgr["predictedLocality"]);
                         dialog.sendMessage(context, message);
                       }),
@@ -1406,7 +1406,7 @@ const pgr =  {
                     onDone: {
                       actions: assign((context, event) => {
                         let { cities, messageBundle, link } = event.data;
-                        let preamble = dialog.get_message(messages.streetlights.city.question.preamble, context.user.locale);
+                        let preamble = dialog.get_message(messages.streetlightdmo.city.question.preamble, context.user.locale);
                         let message = preamble + '\n' + link;
                         let grammer = dialog.constructLiteralGrammer(cities, messageBundle, context.user.locale);
                         context.grammer = grammer;
@@ -1455,7 +1455,7 @@ const pgr =  {
                     onDone: {
                       actions: assign((context, event) => {
                         let { localities, messageBundle,link } = event.data;
-                        let preamble = dialog.get_message(messages.streetlights.locality.question.preamble, context.user.locale);
+                        let preamble = dialog.get_message(messages.streetlightdmo.locality.question.preamble, context.user.locale);
                         let message = preamble + '\n' + link;
                         let grammer = dialog.constructLiteralGrammer(localities, messageBundle, context.user.locale);
                         context.grammer = grammer;
@@ -1510,7 +1510,7 @@ const pgr =  {
               states: {
                 question: {
                   onEntry: assign((context, event) => {
-                    let message = dialog.get_message(messages.streetlights.imageUpload.question, context.user.locale);
+                    let message = dialog.get_message(messages.streetlightdmo.imageUpload.question, context.user.locale);
                     dialog.sendMessage(context, message);
                   }),
                   on: {
@@ -1569,10 +1569,10 @@ const pgr =  {
               target: '#endstate',
               actions: assign((context, event) => {
                 let complaintDetails = event.data;
-                let message = dialog.get_message(messages.streetlights.persistComplaint, context.user.locale);
+                let message = dialog.get_message(messages.streetlightdmo.persistComplaint, context.user.locale);
                 message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
                 message = message.replace('{{complaintLink}}', complaintDetails.complaintLink);
-                let closingStatement = dialog.get_message(messages.streetlights.closingStatement, context.user.locale);
+                let closingStatement = dialog.get_message(messages.streetlightdmo.closingStatement, context.user.locale);
                 message = message + closingStatement;
                 dialog.sendMessage(context, message);
               })
@@ -1581,7 +1581,7 @@ const pgr =  {
         },
       }, 
     }, 
-    // streetlight.state
+    // streetlightdmo.state
     trackComplaint: {
       id: 'trackComplaint',
       invoke: {
@@ -1762,8 +1762,8 @@ let messages = {
     }
   }, // fileComplaint
 
-  // streetlight compalnt
-  streetlights: {
+  // streetlightdmo compalnt
+  streetlightdmo: {
     complaintType: {
       question: {
         preamble: {
@@ -1889,7 +1889,7 @@ let messages = {
       }
     }
   }, 
-  //streetlight complant
+  //streetlightdmo complant
   trackComplaint: {
     noRecords: {
       en_IN: 'Sorry 😥 No complaints are found registered from this mobile number.\n\n👉 To go back to the main menu, type and send mseva.',
