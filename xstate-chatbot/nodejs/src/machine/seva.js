@@ -387,13 +387,13 @@ const sevaMachine = Machine({
           onEntry: assign( (context, event) => {
           (async() => {  
             await new Promise(resolve => setTimeout(resolve, 1000));
-             dialog.sendMessage(context, dialog.get_message(messages.sevamenu.question, context.user.locale), true);
+            dialog.sendMessage(context, dialog.get_message(messages.sevamenu.question, context.user.locale), true);
             // var templateContent = {
             //   output: "3797439",
             //   type: "template"
             // };
 
-         //   dialog.sendMessage(context, templateContent, true);
+            dialog.sendMessage(context, templateContent, true);
           })();
           }),
           on: {
@@ -431,14 +431,6 @@ const sevaMachine = Machine({
             {
               target: '#locale', 
               cond: (context) => context.intention == 'locale'
-            },
-            {
-              target: '#pgr', 
-              cond: (context) => context.intention == 'street_lights'
-            },
-            {
-              target: '#pgr', 
-              cond: (context) => context.intention == 'gar_bage'
             },
             {
               target: 'error'
@@ -573,9 +565,7 @@ let grammer = {
       {intention: 'ws_bills', recognize: ['3', 'wsbill']},
       {intention: 'pt_bills', recognize: ['4', 'ptbill']},
       {intention: 'receipts', recognize: ['5','receipt']},
-      {intention: 'locale', recognize: ['6','language', 'english', 'hindi', 'punjabi']},
-      {intention: 'street_lights', recognize: ['7','file', 'new']},
-      {intention: 'gar_bage', recognize: ['8','file', 'new']},
+      {intention: 'locale', recognize: ['6','language', 'english', 'hindi', 'punjabi']}
     ]
   },
   confirmation: {
