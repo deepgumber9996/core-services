@@ -65,6 +65,69 @@ const pgr =  {
       id: 'fileComplaint',
       initial: 'type',
       states: {
+        // streetlight
+        streetlightone: {
+          // get streetlightone info
+          id: 'streetlightone',
+          initial: 'imageUpload',
+          states: {
+            imageUpload: {
+              id: 'imageUpload',
+              initial: 'question',
+              states: {
+                question: {
+                  onEntry: assign((context, event) => {
+                    let message = dialog.get_message(messages.fileComplaint.imageUpload.question, context.user.locale);
+                    dialog.sendMessage(context, message);
+                  }),
+                  on: {
+                    USER_MESSAGE: 'process'
+                  }
+                },
+                process: {
+                  onEntry: assign((context, event) => {
+                    if(dialog.validateInputType(event, 'image')) {
+                      context.slots.pgr.image = event.message.input;
+                      context.message = {
+                        isValid: true
+                      };
+                    }
+                    else{
+                      let parsed = event.message.input;
+                      let isValid = (parsed === "1");
+                      context.message = {
+                        isValid: isValid,
+                        messageContent: event.message.input
+                      };
+                    }
+                  }),
+                  always:[
+                    {
+                      target: 'error',
+                      cond: (context, event) => {
+                        return ! context.message.isValid;
+                      }
+                    },
+                    {
+                      target: '#location',
+                      cond: (context, event) => {
+                        return context.message.isValid;
+                      }
+                    }
+                  ] 
+                },
+                error: {
+                  onEntry: assign( (context, event) => {
+                    let message = dialog.get_message(dialog.global_messages.error.retry, context.user.locale);
+                    dialog.sendMessage(context, message, false);
+                  }),
+                  always : 'question'
+                }
+              }
+            }
+          }
+        },
+        // notstreetlight
         type: {
           id: 'type',
           initial: 'complaintType2Step',
@@ -143,9 +206,14 @@ const pgr =  {
 
                             let lengthOfList = grammer.length;
                             let otherTypeGrammer = { intention: 'Others', recognize: [ (lengthOfList + 1).toString() ] };
+                            let streetlightTypeGrammer = { intention: 'SreetLightOne', recognize: [ (lengthOfList + 2).toString() ] };
                             prompt += `\n*${lengthOfList + 1}.* ` + dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.otherType, context.user.locale);
-                            grammer.push(otherTypeGrammer);
 
+                            // street Streetother
+                            prompt += `\n*${lengthOfList + 2}.* ` + dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.Streetother, context.user.locale);
+                            // 
+                            grammer.push(otherTypeGrammer);
+                            grammer.push(streetlightTypeGrammer);
                             context.grammer = grammer; // save the grammer in context to be used in next step
                             dialog.sendMessage(context, `${preamble}${prompt}`);
                           }),
@@ -166,6 +234,13 @@ const pgr =  {
                         {
                           target: '#other',
                           cond: (context) => context.intention == 'Others',
+                          actions: assign((context, event) => {
+                            context.slots.pgr["complaint"] = context.intention;
+                          })
+                        },
+                        {
+                          target: '#streetlightone',
+                          cond: (context) => context.intention == 'SreetLightOne',
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"] = context.intention;
                           })
@@ -234,6 +309,14 @@ const pgr =  {
                         },
                         {
                           target: '#other',
+                          cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
+                          actions: assign((context, event) => {
+                            context.slots.pgr["complaint"]= context.intention;
+                          })
+                        },
+                        //streetlightone
+                        {
+                          target: '#streetlightone',
                           cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"]= context.intention;
@@ -891,7 +974,12 @@ let messages = {
             en_IN: 'Others',
             hi_IN: 'Others',
             pa_IN: 'Others'
-          }
+          },
+          Streetother:{
+            en_IN: 'Streetlight',
+            hi_IN: 'Streetlight',
+            pa_IN: 'Streetlight'
+          },
         }
       },
       item: {
