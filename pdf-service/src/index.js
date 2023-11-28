@@ -47,6 +47,16 @@ import {
   convertFooterStringtoFunctionIfExist
 } from "./utils/commons";
 
+const { initializeProducer } = require("./kafka/producer");
+
+// Initialize Kafka producer
+initializeProducer().then(() => {
+  logger.info('Kafka producer connected');
+}).catch((error) => {
+  logger.error(error.stack || error);
+  process.exit(1);
+});
+
 var jp = require("jsonpath");
 //create binary
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
