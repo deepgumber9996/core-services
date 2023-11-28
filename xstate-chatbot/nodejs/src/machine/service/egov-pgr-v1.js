@@ -366,7 +366,7 @@ class PGRV1Service {
     }
 
     let response = await fetch(url, options);
-
+ console.log(url+"URL",options);
 
     let results;
     if(response.status === 201) {
