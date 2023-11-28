@@ -4,7 +4,7 @@ const dialog = require('./util/dialog');
 const localisationService = require('./util/localisation-service');
 const config = require('../env-variables');
 const moment = require("moment-timezone");
-
+let event;
 const pgr =  {
   id: 'pgr',
   initial: 'pgrmenu',
@@ -66,9 +66,9 @@ const pgr =  {
       initial: 'type',
       states: {
         // streetlight
-        streetlightone: {
-          // get streetlightone info
-          id: 'streetlightone',
+        StreetLightNotWorking: {
+          // get StreetLightNotWorking info
+          id: 'StreetLightNotWorking',
           initial: 'imageUpload',
           states: {
             imageUpload: {
@@ -239,7 +239,7 @@ const pgr =  {
                           })
                         },
                         {
-                          target: '#streetlightone',
+                          target: '#StreetLightNotWorking',
                           cond: (context) => context.intention == 'SreetLightOne',
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"] = context.intention;
@@ -314,9 +314,9 @@ const pgr =  {
                             context.slots.pgr["complaint"]= context.intention;
                           })
                         },
-                        //streetlightone
+                        //StreetLightNotWorking
                         {
-                          target: '#streetlightone',
+                          target: '#StreetLightNotWorking',
                           cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"]= context.intention;
@@ -883,8 +883,11 @@ const pgr =  {
             onDone: {
               target: '#endstate',
               actions: assign((context, event) => {
+                console.log(event,"event");
                 let complaintDetails = event.data;
+                console.log(complaintDetails);
                 let message = dialog.get_message(messages.fileComplaint.persistComplaint, context.user.locale);
+                console.log(message);
                 message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
                 message = message.replace('{{complaintLink}}', complaintDetails.complaintLink);
                 let closingStatement = dialog.get_message(messages.fileComplaint.closingStatement, context.user.locale);
@@ -1107,13 +1110,13 @@ let messages = {
 let grammer = {
   pgrmenu: {
     question: [
-      {intention: 'file_new_complaint', recognize: ['1', 'file', 'new']},
+      {intention: 'file_new_complaint', recognize: ['1',]},
       {intention: 'track_existing_complaints', recognize: ['2', 'track', 'existing']}
     ]
   },
   confirmation: {
     choice: [
-      {intention: 'Yes', recognize: ['1',]},
+      {intention: 'Yes', recognize: ['1']},
       {intention: 'No', recognize: ['2']}
     ]
   }
