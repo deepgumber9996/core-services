@@ -240,7 +240,7 @@ const pgr =  {
                         },
                         {
                           target: '#NoStreetlight',
-                          cond: (context) => context.intention == 'SreetLightOne',
+                          cond: (context) => context.intention == 'NoStreetlight',
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"] = context.intention;
                           })
