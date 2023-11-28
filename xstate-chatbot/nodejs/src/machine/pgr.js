@@ -206,7 +206,7 @@ const pgr =  {
 
                             let lengthOfList = grammer.length;
                             let otherTypeGrammer = { intention: 'Others', recognize: [ (lengthOfList + 1).toString() ] };
-                            let streetlightTypeGrammer = { intention: 'SreetLightOne', recognize: [ (lengthOfList + 2).toString() ] };
+                            let streetlightTypeGrammer = { intention: 'NoStreetlight', recognize: [ (lengthOfList + 2).toString() ] };
                             prompt += `\n*${lengthOfList + 1}.* ` + dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.otherType, context.user.locale);
 
                             // street Streetother
