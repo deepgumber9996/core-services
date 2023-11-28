@@ -66,9 +66,9 @@ const pgr =  {
       initial: 'type',
       states: {
         // streetlight
-        streetLightNotWorking: {
-          // get streetLightNotWorking info
-          id: 'streetLightNotWorking',
+        NoStreetlight: {
+          // get NoStreetlight info
+          id: 'NoStreetlight',
           initial: 'imageUpload',
           states: {
             imageUpload: {
@@ -239,7 +239,7 @@ const pgr =  {
                           })
                         },
                         {
-                          target: '#streetLightNotWorking',
+                          target: '#NoStreetlight',
                           cond: (context) => context.intention == 'SreetLightOne',
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"] = context.intention;
@@ -314,10 +314,10 @@ const pgr =  {
                             context.slots.pgr["complaint"]= context.intention;
                           })
                         },
-                        //streetLightNotWorking
+                        //NoStreetlight
                         {
-                          target: '#streetLightNotWorking',
-                          cond: (context) => context.intention == 'StreetLightNotWorking',
+                          target: '#NoStreetlight',
+                          cond: (context) => context.intention == 'NoStreetlight',
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"]= context.intention;
                           })
