@@ -1,6 +1,6 @@
 const Pool = require("pg").Pool;
 import logger from "./config/logger";
-import producer from "./kafka/producer";
+const { producer } = require("./kafka/producer");
 import consumer from "./kafka/consumer";
 import envVariables from "./EnvironmentVariables";
 
@@ -100,22 +100,20 @@ export const insertStoreIds = (
   documentType,
   moduleName
 ) => {
-  var payloads = [];
   var endtime = new Date().getTime();
   var id = uuidv4();
-  payloads.push({
-    topic: createJobKafkaTopic,
-    key: id,
-    messages: JSON.stringify({ jobs: dbInsertRecords })
+  var messages = [];
+  messages.push({
+    value: JSON.stringify({ jobs: dbInsertRecords })
   });
-  producer.send(payloads, function(err, data) {
-    if (err) {
-      logger.error(err.stack || err);
-      errorCallback({
-        message: `error while publishing to kafka: ${err.message}`
-      });
-    } else {
-      logger.info("jobid: " + jobid + ": published to kafka successfully");
+  var payload = {
+    topic: createJobKafkaTopic,
+    messages: messages
+  }
+
+  producer.send(payload).then((data) => {
+    logger.info('Message sent to Kafka:', data);
+    logger.info("jobid: " + jobid + ": published to kafka successfully");
       successCallback({
         message: "Success",
         jobid: jobid,
@@ -128,6 +126,10 @@ export const insertStoreIds = (
         documentType,
         moduleName
       });
-    }
-  });
+  }).catch(err => {
+    logger.error(err.stack || err);
+    errorCallback({
+      message: `error while publishing to kafka: ${err.message}`
+    });
+  })
 };
