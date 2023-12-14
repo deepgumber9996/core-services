@@ -66,67 +66,67 @@ const pgr =  {
       initial: 'type',
       states: {
         // streetlight
-        NoStreetlight: {
-          // get NoStreetlight info
-          id: 'NoStreetlight',
-          initial: 'imageUpload',
-          states: {
-            imageUpload: {
-              id: 'imageUpload',
-              initial: 'question',
-              states: {
-                question: {
-                  onEntry: assign((context, event) => {
-                    let message = dialog.get_message(messages.fileComplaint.imageUpload.question, context.user.locale);
-                    dialog.sendMessage(context, message);
-                  }),
-                  on: {
-                    USER_MESSAGE: 'process'
-                  }
-                },
-                process: {
-                  onEntry: assign((context, event) => {
-                    if(dialog.validateInputType(event, 'image')) {
-                      context.slots.pgr.image = event.message.input;
-                      context.message = {
-                        isValid: true
-                      };
-                    }
-                    else{
-                      let parsed = event.message.input;
-                      let isValid = (parsed === "1");
-                      context.message = {
-                        isValid: isValid,
-                        messageContent: event.message.input
-                      };
-                    }
-                  }),
-                  always:[
-                    {
-                      target: 'error',
-                      cond: (context, event) => {
-                        return ! context.message.isValid;
-                      }
-                    },
-                    {
-                      target: '#location',
-                      cond: (context, event) => {
-                        return context.message.isValid;
-                      }
-                    }
-                  ] 
-                },
-                error: {
-                  onEntry: assign( (context, event) => {
-                    let message = dialog.get_message(dialog.global_messages.error.retry, context.user.locale);
-                    dialog.sendMessage(context, message, false);
-                  }),
-                  always : 'question'
-                }
-              }
-            }
-          }
-        },
+        // NoStreetlight: {
+        //   // get NoStreetlight info
+        //   id: 'NoStreetlight',
+        //   initial: 'imageUpload',
+        //   states: {
+        //     imageUpload: {
+        //       id: 'imageUpload',
+        //       initial: 'question',
+        //       states: {
+        //         question: {
+        //           onEntry: assign((context, event) => {
+        //             let message = dialog.get_message(messages.fileComplaint.imageUpload.question, context.user.locale);
+        //             dialog.sendMessage(context, message);
+        //           }),
+        //           on: {
+        //             USER_MESSAGE: 'process'
+        //           }
+        //         },
+        //         process: {
+        //           onEntry: assign((context, event) => {
+        //             if(dialog.validateInputType(event, 'image')) {
+        //               context.slots.pgr.image = event.message.input;
+        //               context.message = {
+        //                 isValid: true
+        //               };
+        //             }
+        //             else{
+        //               let parsed = event.message.input;
+        //               let isValid = (parsed === "1");
+        //               context.message = {
+        //                 isValid: isValid,
+        //                 messageContent: event.message.input
+        //               };
+        //             }
+        //           }),
+        //           always:[
+        //             {
+        //               target: 'error',
+        //               cond: (context, event) => {
+        //                 return ! context.message.isValid;
+        //               }
+        //             },
+        //             {
+        //               target: '#location',
+        //               cond: (context, event) => {
+        //                 return context.message.isValid;
+        //               }
+        //             }
+        //           ] 
+        //         },
+        //         error: {
+        //           onEntry: assign( (context, event) => {
+        //             let message = dialog.get_message(dialog.global_messages.error.retry, context.user.locale);
+        //             dialog.sendMessage(context, message, false);
+        //           }),
+        //           always : 'question'
+        //         }
+        //       }
+        //     }
+        //   }
+        // },
         // notstreetlight
         type: {
           id: 'type',
@@ -201,14 +201,14 @@ const pgr =  {
                         onDone: {
                           actions: assign((context, event) => {
                             let { complaintCategories, messageBundle } = event.data;
-                            complaintCategories.unshift("Streetlight")
+                         //   complaintCategories.unshift("Streetlight")
                             let preamble = dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.preamble, context.user.locale);
                             let {prompt, grammer} = dialog.constructListPromptAndGrammer(complaintCategories, messageBundle, context.user.locale);
 
                             let lengthOfList = grammer.length;
                             let otherTypeGrammer = { intention: 'Others', recognize: [ (lengthOfList + 1).toString() ] };
                             //let streetlightTypeGrammer = { intention: 'NoStreetlight', recognize: [ (lengthOfList - 12).toString() ] };
-                            let streetlightTypeGrammer = { intention: 'NoStreetlight', recognize: ['1'] };
+                            //let streetlightTypeGrammer = { intention: 'NoStreetlight', recognize: ['1'] };
                             prompt += `\n*${lengthOfList + 1}.* ` + dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.otherType, context.user.locale);
 
                             // street Streetother
@@ -221,7 +221,7 @@ const pgr =  {
                             // console.log(promptd);
                             
                             grammer.push(otherTypeGrammer);
-                            grammer.unshift(streetlightTypeGrammer);
+                           // grammer.unshift(streetlightTypeGrammer);
                             context.grammer = grammer; // save the grammer in context to be used in next step
                             dialog.sendMessage(context, `${preamble}${prompt}`);
                           }),
@@ -246,13 +246,13 @@ const pgr =  {
                             context.slots.pgr["complaint"] = context.intention;
                           })
                         },
-                        {
-                          target: '#NoStreetlight',
-                          cond: (context) => context.intention == 'NoStreetlight',
-                          actions: assign((context, event) => {
-                            context.slots.pgr["complaint"] = context.intention;
-                          })
-                        },
+                        // {
+                        //   target: '#NoStreetlight',
+                        //   cond: (context) => context.intention == 'NoStreetlight',
+                        //   actions: assign((context, event) => {
+                        //     context.slots.pgr["complaint"] = context.intention;
+                        //   })
+                        // },
                         {
                           target: '#complaintItem',
                           cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
@@ -323,13 +323,13 @@ const pgr =  {
                           })
                         },
                         //NoStreetlight
-                        {
-                          target: '#NoStreetlight',
-                          cond: (context) => context.intention == 'NoStreetlight',
-                          actions: assign((context, event) => {
-                            context.slots.pgr["complaint"]= context.intention;
-                          })
-                        },
+                        // {
+                        //   target: '#NoStreetlight',
+                        //   cond: (context) => context.intention == 'NoStreetlight',
+                        //   actions: assign((context, event) => {
+                        //     context.slots.pgr["complaint"]= context.intention;
+                        //   })
+                        // },
                         { 
                           target: 'error'
                         }
@@ -986,11 +986,11 @@ let messages = {
             hi_IN: 'Others',
             pa_IN: 'Others'
           },
-          Streetother:{
-            en_IN: 'Streetlight',
-            hi_IN: 'Streetlight',
-            pa_IN: 'Streetlight'
-          },
+          // Streetother:{
+          //   en_IN: 'Streetlight',
+          //   hi_IN: 'Streetlight',
+          //   pa_IN: 'Streetlight'
+          // },
         }
       },
       item: {
