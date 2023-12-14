@@ -201,19 +201,27 @@ const pgr =  {
                         onDone: {
                           actions: assign((context, event) => {
                             let { complaintCategories, messageBundle } = event.data;
+                            complaintCategories.unshift("Streetlight")
                             let preamble = dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.preamble, context.user.locale);
                             let {prompt, grammer} = dialog.constructListPromptAndGrammer(complaintCategories, messageBundle, context.user.locale);
 
                             let lengthOfList = grammer.length;
                             let otherTypeGrammer = { intention: 'Others', recognize: [ (lengthOfList + 1).toString() ] };
-                            let streetlightTypeGrammer = { intention: 'NoStreetlight', recognize: [ (lengthOfList + 2).toString() ] };
+                            //let streetlightTypeGrammer = { intention: 'NoStreetlight', recognize: [ (lengthOfList - 12).toString() ] };
+                            let streetlightTypeGrammer = { intention: 'NoStreetlight', recognize: ['1'] };
                             prompt += `\n*${lengthOfList + 1}.* ` + dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.otherType, context.user.locale);
 
                             // street Streetother
-                            prompt += `\n*${lengthOfList + 2}.* ` + dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.Streetother, context.user.locale);
-                            // 
+                            // prompt += `\n*${lengthOfList - 12 }.* ` + dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.Streetother, context.user.locale);
+                            console.log(prompt);
+                            // const promptd = prompt.split('\n');
+                            // let lastElement = promptd.pop();
+                            // promptd.unshift(lastElement);
+                            // prompt=promptd.join('\n')
+                            // console.log(promptd);
+                            
                             grammer.push(otherTypeGrammer);
-                            grammer.push(streetlightTypeGrammer);
+                            grammer.unshift(streetlightTypeGrammer);
                             context.grammer = grammer; // save the grammer in context to be used in next step
                             dialog.sendMessage(context, `${preamble}${prompt}`);
                           }),
