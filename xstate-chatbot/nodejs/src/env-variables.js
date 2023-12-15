@@ -19,7 +19,7 @@ const envVariables = {
 
     supportedLocales: process.env.SUPPORTED_LOCALES || 'en_IN',
 
-    googleAPIKey: process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyAS6gWJ1oL6AhJnZnvjK6jmvQjeJBNvRx8',
+    googleAPIKey: process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDjSk-Bw1OuiOE-5K7jsP6KGN2rbcN7iBk',
 
     dateFormat: process.env.DATEFORMAT || 'DD/MM/YYYY',
     timeZone: process.env.TIMEZONE || 'Asia/Kolkata',
@@ -77,7 +77,7 @@ const envVariables = {
         searcherHost: process.env.EGOV_SEARCHER_HOST || "http://egov-searcher.egov:8080/",
         //searcherHost: process.env.EGOV_SEARCHER_HOST || "http://localhost:8084/",
 
-        userServiceHost: process.env.USER_SERVICE_HOST || 'https://mseva.lgpunjab.gov.in',
+        userServiceHost: process.env.USER_SERVICE_HOST || 'https://mseva.lgpunjab.gov.in/',
        // userServiceHost: process.env.USER_SERVICE_HOST || 'http://localhost:8085',
         userServiceOAuthPath: process.env.USER_SERVICE_OAUTH_PATH || 'user/oauth/token',
         userServiceCreateCitizenPath: process.env.USER_SERVICE_CREATE_CITIZEN_PATH || 'user/citizen/_create',
