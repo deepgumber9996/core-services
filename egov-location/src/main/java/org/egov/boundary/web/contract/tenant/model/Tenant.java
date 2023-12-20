@@ -27,7 +27,10 @@ public class Tenant {
     private String helpLineNumber;
     @Setter
     private City city;
-
+    
+    public Tenant() {
+        // Constructor code
+    }
     public TenantType getType() {
         return TenantType.valueOf(type);
     }
