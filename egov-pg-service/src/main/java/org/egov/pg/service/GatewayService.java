@@ -68,8 +68,20 @@ public class GatewayService {
     URI initiateTxn(Transaction transaction) {
         if (!isGatewayActive(transaction.getGateway()))
             throw new CustomException("INVALID_PAYMENT_GATEWAY", "Invalid or inactive payment gateway provided");
+// old payment gateway fetch tech.
+        // Gateway gateway = getGateway(transaction.getGateway());
+        // return gateway.generateRedirectURI(transaction);
 
-        Gateway gateway = getGateway(transaction.getGateway());
+
+        //new way to get gateway
+         Gateway gateway = null;
+       // Gateway gateway = getGateway(transaction.getGateway());
+
+        if (transaction.getTenantId().equalsIgnoreCase("pb.testing")) {
+            gateway =getGateway("CCAVANUE");
+        } else {
+            gateway = getGateway(transaction.getGateway());
+        }
         return gateway.generateRedirectURI(transaction);
     }
 
