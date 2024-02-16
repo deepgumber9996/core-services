@@ -156,14 +156,23 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
 
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
             System.out.println("params "+ params);
-            URI redirectUri = restTemplate.postForLocation(
-                    uriComponents.toUriString(), entity
-            );
+    //            URI redirectUri = restTemplate.postForLocation(
+//                    uriComponents.toUriString(), entity
+//            );
 
+            String finalurl=uriComponents.toString()+"command=initiateTransaction&encRequest="+encRequest+"&access_code="+MERCHANT_ACCESS_CODE;
+            URI redirectUri=null;
+			try {
+				redirectUri = new URI(finalurl);
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             if(isNull(redirectUri))
                 throw new CustomException("CCAVANUE_REDIRECT_URI_GEN_FAILED", "Failed to generate redirect URI");
             else
                 return redirectUri;
+
 
         } catch (RestClientException e){
             log.error("Unable to retrieve redirect URI from gateway", e);
