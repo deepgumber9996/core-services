@@ -23,7 +23,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.net.URISyntaxException;
 
 import java.io.IOException;
 import java.net.URI;
