@@ -95,7 +95,7 @@ public class ccAvanueGateway implements Gateway {
 
         String hash = hashCal(hashSequence);
 
-        
+        transaction.setGateway("CCAVANUE");
 
         List<KeyValuePair> pairList = new ArrayList<>();
         String ccaRequest="";
