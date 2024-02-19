@@ -77,7 +77,7 @@ public class GatewayService {
          Gateway gateway = null;
        // Gateway gateway = getGateway(transaction.getGateway());
 
-        if (transaction.getTenantId().equalsIgnoreCase("pb.amritsar") &&  transaction.getBusinessService().equalsIgnoreCase("PT")) {
+        if (transaction.getTenantId().equalsIgnoreCase("pb.testing") &&  transaction.getBusinessService().equalsIgnoreCase("PT")) {
             gateway =getGateway("CCAVANUE");
         } else {
             gateway = getGateway(transaction.getGateway());
