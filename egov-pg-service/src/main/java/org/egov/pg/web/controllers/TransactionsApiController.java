@@ -90,6 +90,9 @@ public class TransactionsApiController {
                                                                                 requestInfoWrapper, @RequestParam
                                                                                 Map<String,
                                                                                         String> params) {
+
+        log.info("Request Parameter params", params);
+    	log.info("Request Parameter requestInfoWrapper", requestInfoWrapper);
         List<Transaction> transactions = transactionService.updateTransaction(requestInfoWrapper.getRequestInfo(), params);
         ResponseInfo responseInfo = ResponseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper
                 .getRequestInfo(), true);
