@@ -84,7 +84,9 @@ public class TransactionValidator {
         TransactionCriteria criteria = TransactionCriteria.builder()
                 .txnId(optional.get())
                 .build();
-
+        log.info("Request Parameter criteria", criteria);
+        log.info("Request Parameter TxnID", criteria.getTxnId());
+        log.info("Request Parameter getUserUuid", criteria.getUserUuid());
         List<Transaction> statuses = transactionRepository.fetchTransactions(criteria);
 
         //TODO Add to error queue
