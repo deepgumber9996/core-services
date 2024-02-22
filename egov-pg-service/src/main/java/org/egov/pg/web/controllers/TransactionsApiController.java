@@ -46,6 +46,7 @@ public class TransactionsApiController {
      */
     @RequestMapping(value = "/transaction/v1/_create", method = RequestMethod.POST)
     public ResponseEntity<TransactionCreateResponse> transactionsV1CreatePost(@Valid @RequestBody TransactionRequest transactionRequest) {
+System.out.println("Creation Request " +transactionRequest.getTransaction().toString());
 
         Transaction transaction = transactionService.initiateTransaction(transactionRequest);
         ResponseInfo responseInfo = ResponseInfoFactory.createResponseInfoFromRequestInfo(transactionRequest
