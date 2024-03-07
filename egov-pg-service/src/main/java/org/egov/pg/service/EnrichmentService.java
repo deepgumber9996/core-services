@@ -76,7 +76,7 @@ public class EnrichmentService {
 			additionDetailsMap.put("taxAndPayments", (Object) transaction.getTaxAndPayments());
 			transaction.setAdditionalDetails(objectMapper.convertValue(additionDetailsMap, JsonNode.class));
 		}
-        System.out.println("URI"+transaction.getCallbackUrl());
+        
         System.out.println("URI FRONTEND "+UriComponentsBuilder.fromHttpUrl(transaction.getCallbackUrl()).toUriString());
         String uri = UriComponentsBuilder
                 .fromHttpUrl(transaction.getCallbackUrl())
@@ -85,7 +85,7 @@ public class EnrichmentService {
                 .build()
                 .toUriString();
         transaction.setCallbackUrl(uri);
-
+System.out.println("URI "+uri);
         AuditDetails auditDetails = AuditDetails.builder()
                 .createdBy(requestInfo.getUserInfo() != null ? requestInfo.getUserInfo().getUuid() : null)
                 .createdTime(System.currentTimeMillis())
