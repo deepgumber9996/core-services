@@ -103,6 +103,7 @@ public class TransactionService {
         producer.push(appProperties.getSaveTxnTopic(), new org.egov.pg.models.TransactionRequest
                 (requestInfo, transaction));
         producer.push(appProperties.getSaveTxnDumpTopic(), new TransactionDumpRequest(requestInfo, dump));
+System.out.println("Final Transaction "+transaction);
 
         return transaction;
     }
