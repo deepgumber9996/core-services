@@ -24,6 +24,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.net.URISyntaxException;
+import java.util.UUID;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import java.io.IOException;
 import java.net.URI;
@@ -81,9 +84,21 @@ public class ccAvanueGateway implements Gateway {
             return value;
         }
     }
+	
     @Override
     public URI generateRedirectURI(Transaction transaction) {
-
+ String tid = generateTID();
+         System.out.println("Transaction ID: " + tid);
+         
+         try {
+             Thread.sleep(10000); 
+         } catch (InterruptedException e) {
+             e.printStackTrace();
+         }
+         
+      
+         boolean isValid = isTIDValid(tid);
+         System.out.println("Is TID valid? " + isValid);
     	 String hashSequence = "merchant_id|order_id|currency|amount|redirect_url|cancel_url|language||||||||||";
         hashSequence = hashSequence.replace("merchant_id", MERCHANT_ACCESS_CODE);
         hashSequence = hashSequence.replace("order_id", transaction.getTxnId());
@@ -129,6 +144,7 @@ public class ccAvanueGateway implements Gateway {
         
         pairList.add(new KeyValuePair("promo_code", ""));
         pairList.add(new KeyValuePair("customer_identifier", transaction.getConsumerCode()));
+	     pairList.add(new KeyValuePair("TID", tid));
         
         for (KeyValuePair pair : pairList) {
         	ccaRequest = ccaRequest + pair.getKey() + "=" + pair.getValue() + "&";
@@ -179,7 +195,30 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
             throw new ServiceCallException( "Redirect URI generation failed, invalid response received from gateway");
         }
     }
-
+   private String generateTID() {
+    	  // Generate a unique UUID as a transaction ID
+        String tid = UUID.randomUUID().toString();
+        // Get the current timestamp
+        long currentTimeMillis = System.currentTimeMillis();
+        // Add 24 hours to the current time
+        long expirationTimeMillis = currentTimeMillis + (24 * 60 * 60 * 1000);
+        // Include expiration time in the TID
+        tid += "|" + expirationTimeMillis;
+        return tid;
+	}
+    public static boolean isTIDValid(String tid) {
+        // Split the TID to extract expiration time
+        String[] parts = tid.split("\\|");
+        if (parts.length != 2) {
+            return false; // Invalid format
+        }
+        // Extract expiration time
+        long expirationTimeMillis = Long.parseLong(parts[1]);
+        // Get the current time
+        long currentTimeMillis = System.currentTimeMillis();
+        // Check if the current time is within the validity period
+        return currentTimeMillis <= expirationTimeMillis;
+    }
     @Override
     public Transaction fetchStatus(Transaction currentStatus, Map<String, String> params) {
         ccAvanueresponse resp = objectMapper.convertValue(params, ccAvanueresponse.class);
