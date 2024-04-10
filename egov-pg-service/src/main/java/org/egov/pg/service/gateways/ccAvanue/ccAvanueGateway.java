@@ -37,6 +37,20 @@ import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
+import javax.net.ssl.HttpsURLConnection;
+import org.egov.pg.repository.ServiceCallRepository;
+import org.egov.pg.service.gateways.ccavenue.AesUtil;
+import org.egov.pg.service.gateways.ccavenue.ccAvanueresponse;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 @Service
 @Slf4j
 public class ccAvanueGateway implements Gateway {
