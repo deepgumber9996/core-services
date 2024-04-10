@@ -285,10 +285,7 @@ public static String processUrlConnectionReq(String pBankData,String pBankUrl) t
 		{
 			vHttpUrlConnection = (HttpsURLConnection)vUrl.openConnection();
 		} 
-		else if(vUrl.openConnection() instanceof com.sun.net.ssl.HttpsURLConnection)
-		{
-			vHttpUrlConnection = (com.sun.net.ssl.HttpsURLConnection)vUrl.openConnection();
-		} else
+		else
 		{
 			vHttpUrlConnection = (URLConnection)vUrl.openConnection();
 		}
