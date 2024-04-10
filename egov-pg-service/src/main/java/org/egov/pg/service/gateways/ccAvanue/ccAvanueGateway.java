@@ -219,40 +219,94 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
         // Check if the current time is within the validity period
         return currentTimeMillis <= expirationTimeMillis;
     }
-    @Override
+ @Override
     public Transaction fetchStatus(Transaction currentStatus, Map<String, String> params) {
-        ccAvanueresponse resp = objectMapper.convertValue(params, ccAvanueresponse.class);
-        if( ! isNull(resp.getHash()) && ! isNull(resp.getStatus()) && ! isNull(resp.getTxnid()) && ! isNull(resp.getAmount())
-            && !isNull(resp.getProductinfo()) && !isNull(resp.getFirstname()) ){
-            resp.setTransaction_amount(resp.getAmount());
-            String checksum = resp.getHash();
+         Transaction txn =null;
+         String ccaRequest="";         
+         String orderId= currentStatus.getTxnId();
+         ccaRequest =  "{'order_no': '"+orderId+"'}";
+  		String pCommand="orderStatusTracker";
+ 		String pRequestType="JSON";
+ 		String pResponseType="JSON";
+ 		String pVersion="1.2";
+ 		String vResponse="";
+ 		
+ 		AesUtil aesUtil=new AesUtil("D14357BBD21BD64FF7D074944DB08DFE");           
 
-            String hashSequence = "SALT|status||||||udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|";
-            hashSequence = hashSequence.concat(MERCHANT_WORKING_KEY);
-            hashSequence = hashSequence.replace("SALT", MERCHANT_ACCESS_CODE);
-            hashSequence = hashSequence.replace("status", resp.getStatus());
-            hashSequence = hashSequence.replace("udf5", resp.getUdf5());
-            hashSequence = hashSequence.replace("udf4", resp.getUdf4());
-            hashSequence = hashSequence.replace("udf3", resp.getUdf3());
-            hashSequence = hashSequence.replace("udf2", resp.getUdf2());
-            hashSequence = hashSequence.replace("udf1", resp.getUdf1());
-            hashSequence = hashSequence.replace("email", resp.getEmail());
-            hashSequence = hashSequence.replace("firstname", resp.getFirstname());
-            hashSequence = hashSequence.replace("productinfo", resp.getProductinfo());
-            hashSequence = hashSequence.replace("amount", resp.getTransaction_amount());
-            hashSequence = hashSequence.replace("txnid", resp.getTxnid());
-            String hash = hashCal(hashSequence);
+       String encRequest = aesUtil.encrypt(ccaRequest);
+  	 	System.out.println("ENC REq "+encRequest);  
+  	    StringBuffer wsDataBuff=new StringBuffer();
+  	    wsDataBuff.append("enc_request="+encRequest+"&access_code="+MERCHANT_ACCESS_CODE+"&command="+pCommand+"&response_type="+pResponseType+"&request_type="+pRequestType+"&version="+pVersion);
+		
+  	     try {
+			  vResponse = processUrlConnectionReq(wsDataBuff.toString(), MERCHANT_URL_STATUS);
+	  	      String[] keyValuePairs = vResponse.toString().split("&");
+	      	 //String[] keyValuePairs = response.toString().split("&");
+	           String resp = keyValuePairs[1];
+	           String status = keyValuePairs[0];
 
-            if(checksum.equalsIgnoreCase(hash)){
-                Transaction txn = transformRawResponse(resp, currentStatus);
-                if (txn.getTxnStatus().equals(Transaction.TxnStatusEnum.PENDING) || txn.getTxnStatus().equals(Transaction.TxnStatusEnum.FAILURE)) {
-                    return txn;
-                }
-            }
-        }
-
-        return fetchStatusFromGateway(currentStatus);
+	          	     AesUtil aes = new AesUtil("D14357BBD21BD64FF7D074944DB08DFE");
+	         		 String decResp = aes.decrypt(resp.substring(13, resp.length()));
+	         		 String[] keyValuePairs1 = decResp.split(",");
+	         		// List<String> keyValueList = Arrays.asList(keyValuePairs1);
+	         		 System.out.println(keyValuePairs1[1]);
+	         		 txn =  transformRawResponseNew(keyValuePairs1, currentStatus,status); 
+	         		 return txn; 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return txn;
     }
+
+
+public static String processUrlConnectionReq(String pBankData,String pBankUrl) throws Exception{
+		URL	vUrl = null;
+		URLConnection vHttpUrlConnection = null;
+		DataOutputStream vPrintout = null;
+		DataInputStream	vInput = null;
+		StringBuffer vStringBuffer=null;
+		vUrl = new URL(pBankUrl);
+
+		if(vUrl.openConnection() instanceof HttpsURLConnection)
+		{
+			vHttpUrlConnection = (HttpsURLConnection)vUrl.openConnection();
+		} 
+		else if(vUrl.openConnection() instanceof com.sun.net.ssl.HttpsURLConnection)
+		{
+			vHttpUrlConnection = (com.sun.net.ssl.HttpsURLConnection)vUrl.openConnection();
+		} else
+		{
+			vHttpUrlConnection = (URLConnection)vUrl.openConnection();
+		}
+		vHttpUrlConnection.setDoInput(true);
+		vHttpUrlConnection.setDoOutput(true);
+		vHttpUrlConnection.setUseCaches(false);
+		vHttpUrlConnection.connect();
+		vPrintout = new DataOutputStream (vHttpUrlConnection.getOutputStream());
+		vPrintout.writeBytes(pBankData);
+		vPrintout.flush();
+		vPrintout.close();
+		try {
+			BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(vHttpUrlConnection.getInputStream()));
+			vStringBuffer = new StringBuffer();
+			String vRespData;
+			while((vRespData = bufferedreader.readLine()) != null) 
+				if(vRespData.length() != 0)
+					vStringBuffer.append(vRespData.trim());
+			bufferedreader.close();
+			bufferedreader = null;
+		}finally {  
+			if (vInput != null)
+				vInput.close(); 
+			if (vHttpUrlConnection != null)  
+				vHttpUrlConnection = null;  
+		}  
+		return vStringBuffer.toString();
+	}
+	
+    
+	
 
     @Override
     public boolean isActive() {
@@ -270,6 +324,40 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
         return "txnid";
     }
 
+
+    private Transaction transformRawResponseNew(String[] keyValuePairs1, Transaction currentStatus, String status2) {
+
+        Transaction.TxnStatusEnum status;
+
+        
+        String gatewayStatus = status2;
+
+        if (gatewayStatus.equalsIgnoreCase("0")) {
+            status = Transaction.TxnStatusEnum.SUCCESS;
+            return Transaction.builder()
+                    .txnId(currentStatus.getTxnId())
+                    .txnAmount(keyValuePairs1[3])
+                    .txnStatus(status)
+                    .gatewayTxnId(keyValuePairs1[1])
+                    .gatewayPaymentMode(keyValuePairs1[3])
+                    .gatewayStatusCode(keyValuePairs1[3])
+                    .gatewayStatusMsg(keyValuePairs1[3])
+                    .responseJson(keyValuePairs1)
+                    .build();
+        } else {
+            status = Transaction.TxnStatusEnum.FAILURE;
+            return Transaction.builder()
+                    .txnId(currentStatus.getTxnId())
+                    .txnAmount(keyValuePairs1[3])
+                    .txnStatus(status)
+                    .gatewayTxnId(keyValuePairs1[1])
+                    .gatewayStatusCode(keyValuePairs1[3])
+                    .gatewayStatusMsg(keyValuePairs1[3])
+                    .responseJson(keyValuePairs1)
+                    .build();
+        }
+
+    }
 
     private Transaction transformRawResponse(ccAvanueresponse resp, Transaction currentStatus) {
 
