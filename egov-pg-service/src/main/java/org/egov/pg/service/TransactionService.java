@@ -151,19 +151,22 @@ System.out.println("Final Transaction "+transaction);
         Transaction newTxn = null;
 
       if(currentTxnStatus.getGateway().contentEquals("CCAVANUE")) {
-    	   
-    	 AesUtil aes = new AesUtil("D14357BBD21BD64FF7D074944DB08DFE");
+		 AesUtil aes = new AesUtil("D14357BBD21BD64FF7D074944DB08DFE");
    		 String decResp = aes.decrypt(requestParams.get("encResp"));
    		 String[] keyValuePairs = decResp.split("&");
    		 List<String> keyValueList = Arrays.asList(keyValuePairs);
-   		  newTxn = currentTxnStatus;
-   	// Enrich the new transaction status before persisting
-          enrichmentService.enrichUpdateTransactionForCCAvanue(requestInfo,keyValueList, newTxn,currentTxnStatus);
-       // Check if transaction is successful, amount matches etc
-          if (validator.shouldGenerateReceipt(currentTxnStatus, newTxn)) {
-             	TransactionRequest request = TransactionRequest.builder().requestInfo(requestInfo).transaction(newTxn).build();
-             	paymentsService.registerPayment(request);
-             }
+   		 if(validator.skipGateway(currentTxnStatus)) {
+		            newTxn = currentTxnStatus;
+        	} else{
+            		   newTxn = gatewayService.getLiveStatus(currentTxnStatus, requestParams);
+	                  // Enrich the new transaction status before persisting
+              		  enrichmentService.enrichUpdateTransaction(new TransactionRequest(requestInfo, currentTxnStatus), newTxn);
+        		 // Check if transaction is successful, amount matches etc
+         	   if (validator.shouldGenerateReceipt(currentTxnStatus, newTxn)) {
+          	  	TransactionRequest request = TransactionRequest.builder().requestInfo(requestInfo).transaction(newTxn).build();
+         	  	paymentsService.registerPayment(request);
+           	 }
+        	} 
        }else {
     	   if(validator.skipGateway(currentTxnStatus)) {
                newTxn = currentTxnStatus;
