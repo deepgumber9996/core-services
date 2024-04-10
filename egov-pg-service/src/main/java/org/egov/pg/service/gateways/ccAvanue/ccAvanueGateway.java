@@ -39,7 +39,7 @@ import static java.util.Objects.isNull;
 import javax.net.ssl.HttpsURLConnection;
 import org.egov.pg.repository.ServiceCallRepository;
 import org.egov.pg.service.gateways.ccAvanue.AesUtil;
-import org.egov.pg.service.gateways.ccAvanueresponse;
+import org.egov.pg.service.gateways.ccAvanue.ccAvanueresponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
