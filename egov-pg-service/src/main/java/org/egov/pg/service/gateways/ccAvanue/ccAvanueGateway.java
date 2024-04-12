@@ -337,21 +337,21 @@ public static String processUrlConnectionReq(String pBankData,String pBankUrl) t
 
     private Transaction transformRawResponseNew(String[] keyValuePairs1, Transaction currentStatus, String status2) {
 
+
         Transaction.TxnStatusEnum status;
-
-        
-        String gatewayStatus = status2;
-
-        if (gatewayStatus.equalsIgnoreCase("0")) {
+        String gatewayStatus[] = status2.split("=");;        
+        String tanAmtArray[] = keyValuePairs1[3].split(":");
+       // status2= "0";
+        if (gatewayStatus[1].equalsIgnoreCase("0")) {
             status = Transaction.TxnStatusEnum.SUCCESS;
             return Transaction.builder()
                     .txnId(currentStatus.getTxnId())
-                    .txnAmount(keyValuePairs1[3])
+                    .txnAmount(tanAmtArray[1])
                     .txnStatus(status)
                     .gatewayTxnId(keyValuePairs1[1])
-                    .gatewayPaymentMode(keyValuePairs1[3])
-                    .gatewayStatusCode(keyValuePairs1[3])
-                    .gatewayStatusMsg(keyValuePairs1[3])
+                    .gatewayPaymentMode(keyValuePairs1[27])
+                    .gatewayStatusCode(keyValuePairs1[27])
+                    .gatewayStatusMsg(keyValuePairs1[37])
                     .responseJson(keyValuePairs1)
                     .build();
         } else {
@@ -362,11 +362,10 @@ public static String processUrlConnectionReq(String pBankData,String pBankUrl) t
                     .txnStatus(status)
                     .gatewayTxnId(keyValuePairs1[1])
                     .gatewayStatusCode(keyValuePairs1[3])
-                    .gatewayStatusMsg(keyValuePairs1[3])
+                    .gatewayStatusMsg(keyValuePairs1[37])
                     .responseJson(keyValuePairs1)
                     .build();
         }
-
     }
 
     private Transaction transformRawResponse(ccAvanueresponse resp, Transaction currentStatus) {
