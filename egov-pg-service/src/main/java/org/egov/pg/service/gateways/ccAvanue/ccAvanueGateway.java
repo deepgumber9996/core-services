@@ -341,8 +341,10 @@ public static String processUrlConnectionReq(String pBankData,String pBankUrl) t
         Transaction.TxnStatusEnum status;
         String gatewayStatus[] = status2.split("=");;        
         String tanAmtArray[] = keyValuePairs1[3].split(":");
+	String finalStatus[] = keyValuePairs1[23].split(":");
+        String finalOrderStatus= finalStatus[1];
        // status2= "0";
-        if (gatewayStatus[1].equalsIgnoreCase("0")) {
+        if (gatewayStatus[1].equalsIgnoreCase("0") && finalOrderStatus.equalsIgnoreCase("Successful")) {
             status = Transaction.TxnStatusEnum.SUCCESS;
             return Transaction.builder()
                     .txnId(currentStatus.getTxnId())
@@ -365,7 +367,7 @@ public static String processUrlConnectionReq(String pBankData,String pBankUrl) t
                     .gatewayStatusMsg(keyValuePairs1[37])
                     .responseJson(keyValuePairs1)
                     .build();
-        }
+        }	    
     }
 
     private Transaction transformRawResponse(ccAvanueresponse resp, Transaction currentStatus) {
