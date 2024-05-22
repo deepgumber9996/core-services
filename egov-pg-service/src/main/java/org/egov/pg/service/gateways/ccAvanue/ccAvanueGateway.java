@@ -252,13 +252,17 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
   	    wsDataBuff.append("enc_request="+encRequest+"&access_code="+MERCHANT_ACCESS_CODE+"&command="+pCommand+"&response_type="+pResponseType+"&request_type="+pRequestType+"&version="+pVersion);
 		
   	     try {
+		            log.info("ENC WS Data Buff "+wsDataBuff.toString());
+		            log.info("Merchant URL "+MERCHANT_URL_STATUS);
 			  vResponse = processUrlConnectionReq(wsDataBuff.toString(), MERCHANT_URL_STATUS);
+		     	log.info("Response: "+vResponse);
 	  	      String[] keyValuePairs = vResponse.toString().split("&");
 	      	 //String[] keyValuePairs = response.toString().split("&");
 	           String resp = keyValuePairs[1];
 	           String status = keyValuePairs[0];
-  			    
-	          	     
+		   	        log.info("Complete response: "+resp);
+  			        String resp1= resp.substring(13, resp.length());
+	          	        log.info("Response to decrypt: "+resp1);
 	         		 String decResp = aesUtilenc.decrypt(resp.substring(13, resp.length()));
 	         		 String[] keyValuePairs1 = decResp.split(",");
 	         		// List<String> keyValueList = Arrays.asList(keyValuePairs1);
