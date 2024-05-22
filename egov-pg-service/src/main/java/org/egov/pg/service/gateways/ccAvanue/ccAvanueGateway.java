@@ -243,10 +243,10 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
  		String pResponseType="JSON";
  		String pVersion="1.2";
  		String vResponse="";
- 		AesUtil aesUtil=new AesUtil(MERCHANT_WORKING_KEY);
+ 		AesUtil aesUtilenc=new AesUtil(MERCHANT_WORKING_KEY);
  		
 
-       String encRequest = aesUtil.encrypt(ccaRequest);
+       String encRequest = aesUtilenc.encrypt(ccaRequest);
   	 	System.out.println("ENC REq "+encRequest);  
   	    StringBuffer wsDataBuff=new StringBuffer();
   	    wsDataBuff.append("enc_request="+encRequest+"&access_code="+MERCHANT_ACCESS_CODE+"&command="+pCommand+"&response_type="+pResponseType+"&request_type="+pRequestType+"&version="+pVersion);
@@ -257,9 +257,9 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
 	      	 //String[] keyValuePairs = response.toString().split("&");
 	           String resp = keyValuePairs[1];
 	           String status = keyValuePairs[0];
-  			     AesUtil aesUtil=new AesUtil(MERCHANT_WORKING_KEY);
+  			    
 	          	     
-	         		 String decResp = aes.decrypt(resp.substring(13, resp.length()));
+	         		 String decResp = aesUtilenc.decrypt(resp.substring(13, resp.length()));
 	         		 String[] keyValuePairs1 = decResp.split(",");
 	         		// List<String> keyValueList = Arrays.asList(keyValuePairs1);
 	         		 System.out.println(keyValuePairs1[1]);
