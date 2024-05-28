@@ -139,6 +139,11 @@ public class TransactionService {
      */
     public List<Transaction> updateTransaction(RequestInfo requestInfo, Map<String, String> requestParams) {
 
+       if(requestParams.get("orderNo")!= null) {
+    		 requestParams.put("txnId", requestParams.get("orderNo"));
+    		 requestParams.put("encResp", requestParams.get("encResp"));
+    	}
+	    
         Transaction currentTxnStatus = validator.validateUpdateTxn(requestParams);
 
         log.debug(currentTxnStatus.toString());
