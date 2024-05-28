@@ -245,7 +245,7 @@ params.add("access_code", MERCHANT_ACCESS_CODE);
  		String vResponse="";
  		AesUtil aesUtilenc=new AesUtil(MERCHANT_WORKING_KEY);
 
-	        String decRespp = aesUtil.decrypt(encResp);
+	        String decRespp = aesUtilenc.decrypt(encResp);
  		log.info(decRespp);
  		String[] keyValuePairs2 = decRespp.split(",");
  		String referenceno = keyValuePairs2[0];
